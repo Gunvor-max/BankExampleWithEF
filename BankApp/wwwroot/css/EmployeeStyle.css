@@ -1,0 +1,60 @@
+﻿.custom-col {
+    padding: 20px;
+    border: 2px solid #000000;
+    border-radius: 7px;
+    min-height: 100vh;
+}
+
+.custom-row > [class^="col-"] {
+    /* Optional: Styling for columns if needed */
+}
+
+input {
+    padding-bottom: 20px;
+}
+
+.hidden-button {
+    display: none; /* Ensures the button is not visible but functional */
+}
+
+tr:hover {
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+
+th {
+    text-align: center;
+}
+
+.overflow-scroll {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+#Zscroll {
+    max-height: 1000px;
+    overflow-y: auto;
+}
+
+.skiftretning {
+    display: flex;
+    justify-content: end;
+}
+
+#DeleteAndUpdateBtn {
+    display: flex;
+}
+
+PaymentFormBtn {
+    display: flex;
+    justify-content: end;
+    padding: 20px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: white;
+}

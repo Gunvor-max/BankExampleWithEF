@@ -1,0 +1,229 @@
+﻿@page
+@model BankApp.Pages.EmployeePages.EmployeeListModel
+@using BankLib.Model;
+@{
+    ViewData["Title"] = "Liste af medarbejdere";
+    ViewData["SidebarVisible"] = true;
+    bool isEditMode = Model.IsEditMode;
+    bool isDeleteAble = Model.IsDeleteable;
+    bool isDeletedConfirmation = Model.IsDeletedConfirmation;
+    bool isCustomerAgent = Model.IsCustomerAgent;
+    bool isEditTriggered = Model.IsEditTriggered;
+    bool isCreatedConfirmation = Model.IsCreatedConfirmation;
+    bool canSetPassWord = Model.CanSetPassword;
+    bool isUpdatedConfirmation = Model.IsUpdatedConfirmation;
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+}
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/EmployeeStyle.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid mt-3">
+        <h1>Medarbejdere</h1>
+        @if (isDeletedConfirmation)
+        {
+            <div class="alert-success">
+                <h3>
+                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu slettet fra systemet
+                </h3>
+            </div>
+        }
+        @if (isCreatedConfirmation)
+        {
+            <div class="alert-success">
+                <h3>
+                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu oprettet i systemet
+                </h3>
+            </div>
+        }
+        @if (isUpdatedConfirmation)
+        {
+            <div class="alert-success">
+                <h3>
+                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu opdateret i systemet
+                </h3>
+            </div>
+        }
+        <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
+            <div class="row custom-row">
+                <div class="col-md-6 custom-col">
+
+                    <form method="post">
+                        <input class="form-control mb-3" type="text" asp-for="@Model.Search" placeholder="Søg i medarbejdere..." />
+                        <input type="submit" asp-page-handler="SearchEmployees" class="btn btn-primary visually-hidden" value="søg" />
+                    </form>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Medarbejder ID</th>
+                                <th>Fornavn</th>
+                                <th>Efternavn</th>
+                                <th>Mail</th>
+                                <th>Adgangsniveau</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Employee c in @Model.Employees)
+                            {
+
+                                <form method="post" asp-page-handler="SelectEmployee" asp-route-Id="@c.EmployeeId" id="myForm">
+                                <tr class="clickable-row" style="cursor:pointer">
+                                    <td>
+                                                @c.EmployeeId
+                                    </td>
+                                    <td>
+                                                @c.FirstName
+                                    </td>
+                                    <td>
+                                                @c.LastName
+                                    </td>
+                                    <td>
+                                                @c.Mail
+                                    </td>
+                                    <td>
+                                                @c.Position.AccessLevel
+                                    </td>
+                                </tr>
+                                </form>
+                            }
+                        </tbody>
+                    </table>
+                        <script>
+                            $(".clickable-row").click(function () {
+                                $('#myForm').submit();  // Submit the form
+                            });
+                        </script>
+                </div>
+                <div class="col-md-6 custom-col">
+                    <form method="post">
+                        <h4>Personlige oplysninger:</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" value="@Model.Choosen_Mail" asp-for="Choosen_Mail" minlength="8" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_Mail" for="floatingInput">Mail</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="2" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
+                                </div>
+                                <div class="form-floating mt-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_PhoneNumber" asp-for="Choosen_PhoneNumber" minlength="8" maxlength="8" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_PhoneNumber" for="floatingInput">Telefon nr.</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mt-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_Gender" asp-for="Choosen_Gender" minlength="2" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_Gender" for="floatingInput">Køn</label>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Adresse oplysninger:</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_StreetName" asp-for="Choosen_StreetName" minlength="1" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_StreetName" for="floatingInput">Vej Navn</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_City" asp-for="Choosen_City" minlength="2" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_City" for="floatingInput">By</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" id="floatingInput" value="@Model.Choosen_HouseNumber" asp-for="Choosen_HouseNumber" min="1" max="100" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_HouseNumber" for="floatingInput">Husnummer</label>
+                                </div>
+                                <div class="form-floating mt-3">
+                                    <input type="number" class="form-control" id="floatingInput" value="@Model.Choosen_ZipCode" asp-for="Choosen_ZipCode" min="1000" max="10000" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_ZipCode" for="floatingInput">Postnummer</label>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Arbejdsrelaterede oplysninger:</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_Title" asp-for="Choosen_Title" minlength="2" maxlength="100" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_Title" for="floatingInput">Titel</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_PositionDescription" asp-for="Choosen_PositionDescription" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_PositionDescription" for="floatingInput">Arbejds Beskrivelse</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_DepartmentName" asp-for="Choosen_DepartmentName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_DepartmentName" for="floatingInput">Afdeling</label>
+                                </div>
+                                <div class="form-floating mt-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_DepartmentDescription" asp-for="Choosen_DepartmentDescription" minlength="1" max="50" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_DepartmentDescription" for="floatingInput">Afdelings Beskrivelse</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" id="floatingInput" min="1" max="5" value="@Model.Choosen_AccessLevel" min="1" max="5" required asp-for="Choosen_AccessLevel" readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_AccessLevel" for="floatingInput">Adgangsniveau</label>
+                                </div>
+                                @if (canSetPassWord)
+                                {
+                                    <div class="form-floating mt-3">
+                                        <input type="password" class="form-control" id="floatingInput" value="@Model.Choosen_Password" asp-for="Choosen_Password" minlength="3" maxlength="255" required readonly="@(isEditMode ? false : true)" />
+                                        <label asp-for="Choosen_Password" for="floatingInput">Password</label>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_ImagePath" asp-for="Choosen_ImagePath" minlength="3" required readonly="@(isEditMode ? false : true)" />
+                                    <label asp-for="Choosen_ImagePath" for="floatingInput">Billede streng</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        @if (isEditMode)
+                        {
+                            @if (isEditTriggered)
+                            {
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">Gem ændringer</button>
+                                <!-- PartielView to trigger the EmployeeUpdate modal-->
+                                @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
+                            }
+                        }
+                        else if (isDeleteAble)
+                        {
+                            <button type="submit" asp-page-handler="EnableEdit" asp-route-id="@Model.EmployeeId" asp-route-accessLevel="@Model.Choosen_AccessLevel" class="btn btn-outline-warning">Ret</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">X</button>
+                        }
+                        @if (!isEditMode)
+                        {
+                            <button type="submit" asp-page-handler="ActivateCreateEmployee" class="btn btn-success">Opret Medarbejder</button>
+                        }
+                        else
+                        {
+                            <button type="submit" asp-page-handler="CreateEmployee" class="btn btn-success">Opret Medarbejder</button>
+                        }
+                        <!-- PartielView to trigger the EmployeeDelete modal-->
+                        @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

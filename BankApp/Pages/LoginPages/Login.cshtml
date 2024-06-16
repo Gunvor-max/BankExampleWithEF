@@ -1,0 +1,45 @@
+﻿@page
+@model BankApp.Pages.LoginPages.LoginModel
+@{
+}
+<div class="container d-flex justify-content-center mb-5 mt-5">
+    <div class="card shadow w-25" style="border-radius: 2rem;" id="cardlogin">
+        <h2 class="card-title text-center mt-2">Login</h2>
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger" role="alert">
+                    @Model.ErrorMessage
+                </div>
+            }
+
+            <form method="post" asp-page-handler="Login">
+                <div class="form-group">
+                    <label class="form-label">Email:</label>
+                    <input type="email" class="form-control" minlength="8" maxlength="30" required asp-for="@Model.Email" />
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password:</label>
+                    <input type="password" class="form-control" minlenght="3" required asp-for="@Model.Password" />
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <input type="submit" class="btn btn-primary" value="Login" />
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+            <form method="get">
+                <div class="form-group">
+                    <h5 class="card-title text-center mt-2">Har du ikke en bruger?</h5>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <input type="submit" asp-page="/Customer/CreateC" class="btn btn-primary" value="Opret bruger" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

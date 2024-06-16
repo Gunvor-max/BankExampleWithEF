@@ -1,0 +1,86 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "EFContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Model",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "BankLib",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[BankExampleWithEF_Account]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_Address]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_City]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_Customer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_Department]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_Employee]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_EmployeeLog]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_MainAccount]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_Position]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_Transaction]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankExampleWithEF_ZipCodeTable]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
