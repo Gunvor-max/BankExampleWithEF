@@ -91,9 +91,9 @@ namespace BankApp.Pages.EmployeePages
             }
         }
 
-        public IActionResult OnPostSearchEmployees()
+        public void OnPostSearchEmployees()
         {
-            return Page();
+            Employees = _employeeRepository.Search(Search);
         }
 
         public void OnPostSelectEmployee(int Id)
@@ -207,6 +207,7 @@ namespace BankApp.Pages.EmployeePages
                 Department = new Department(0,Choosen_DepartmentName,Choosen_DepartmentDescription),
             };
                 ShowEmployee = _employeeRepository.Create(newemployee);
+            Employees = _employeeRepository.GetAll();
             IsCreatedConfirmation = true;
         }
     }

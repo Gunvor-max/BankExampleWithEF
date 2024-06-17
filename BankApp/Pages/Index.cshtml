@@ -1,7 +1,37 @@
 ﻿@page
 @model IndexModel
+@using BankLib.Model;
 @{
     ViewData["Title"] = "Home page";
+
+    Employee? employee = null;
+    Customer? customer = null;
+    object? user = null;
+    try
+    {
+        user = SessionHelper.Get<object>(user, HttpContext);
+        if (user is not null)
+        {
+            if (user.ToString().Contains("AccessLevel"))
+            {
+                employee = SessionHelper.Get<Employee>(employee, HttpContext);
+            }
+            else
+            {
+                customer = SessionHelper.Get<Customer>(customer, HttpContext);
+            }
+        }
+    }
+    catch
+    {
+
+    }
+    @if (employee is not null)
+    {
+
+        ViewData["SidebarVisible"] = true;
+
+    }
 }
 
 <div class="text-center">

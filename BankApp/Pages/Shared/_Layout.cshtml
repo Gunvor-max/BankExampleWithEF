@@ -32,45 +32,175 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BankApp.styles.css" asp-append-version="true" />
+    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- ICONS FOR SIDEBAR -->
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- PartielView to the logout modal-->
+    <partial name="PartialViews/ModalLogout" />
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">BankApp</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Banken</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                    <ul class="navbar-nav flex-grow-1" id="navbar">
+                        <li class="nav-item" id="navbaritems">
+                            <button class="btn btn-link" asp-area="" disabled>Produkter</button>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="EmployeePages/EmployeeList">Medarbejdere</a>
+                        <li class="nav-item" id="navbaritems">
+                            <button class="btn btn-link" asp-area="" disabled>Rådgivning</button>
                         </li>
-                        <li class="nav-item">
-                            @if (employee is null)
+                        <li class="nav-item" id="navbaritems">
+                            <button class="btn btn-link" asp-area="" disabled>Digitale løsninger</button>
+                        </li>
+                        <li class="nav-item" id="navbaritems">
+                            <button class="btn btn-link" asp-area="" disabled>Bliv kunde</button>
+                        </li>
+
+                        <li class="nav-item" id="navbaritems">
+                            @if (user is not null)
                             {
-                                <a class="nav-link text-dark" asp-area="" asp-page="LoginPages/Login">Login</a>
+                                <div class="dropdown">
+                                    <button id="hovertravellogo" class="btn btn-primary" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <ul id="personlogolist">
+                                            <li>
+                                                @if (employee is not null)
+                                                {
+                                                    switch (employee.Position.AccessLevel)
+                                                    {
+                                                        case 1:
+                                                            <p id="travellogotext">CustomerAgent</p>
+                                                            break;
+                                                        case 4:
+                                                            <p id="travellogotext">Manager</p>
+                                                            break;
+                                                        case 5:
+                                                            <p id="travellogotext">Admin</p>
+                                                            break;
+                                                    }
+                                                }
+                                                else if (customer is not null)
+                                                {
+                                                    <p id="travellogotext">@customer.FirstName</p>
+                                                }
+
+                                            </li>
+                                            <li id="personlistitem">
+                                                <i id="personlogo">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                                    </svg>
+                                                </i>
+                                            </li>
+                                        </ul>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" data-bs-hover="dropdown" area-expanded="true">
+                                        @if (employee is null && customer is null)
+                                        {
+                                            <a href="/LoginPages/Login" class="dropdown-item">Log ind</a>
+                                        }
+                                        else
+                                        {
+                                            <a type="submit" class="dropdown-item" value="Modal" data-bs-toggle="modal" data-bs-target="#myModal" data-package-id="1">Logout</a>
+                                        }
+                                    </div>
+                                </div>
                             }
                             else
                             {
-                                <a class="nav-link text-dark" asp-area="" asp-page="LoginPages/Logout">Logout</a>
+                                <a href="LoginPages/Login" class="btn btn-primary">Log ind</a>
                             }
                         </li>
+
+
+                        @*Search Bar*@
+                        @using (Html.BeginForm(FormMethod.Get))
+                        {
+                            <li id="searchbar">
+                                @Html.TextBox("SearchTrip", null, new { @placeholder = "Søg på banken.dk" }) <button asp-page="" type="submit" value="" class="btn btn-outline-primary">
+                                    <i>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                        </svg>
+                                    </i>
+                                </button>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    @if (ViewData["SidebarVisible"] as bool? ?? false)
+    {
+        <div class="d-flex flex-column min-vh-100">
+            <!--- Main content --->
+            <div class="flex-grow-1">
+                <main role="main" class="pb-3" style="display: flex;">
 
+                    <div class="d-flex" style="min-height: 100vh;">
+                        <aside id="sidebar">
+                            <div class="d-flex">
+                                <input type="checkbox" id="toggle-sidebar" class="toggle-checkbox" hidden>
+                                <!-- Label that acts as the button, associating with the checkbox -->
+                                <label for="toggle-sidebar" class="toggle-btn" style="height: auto;">
+                                    <i class="lni lni-grid-alt"></i>
+                                </label>
+                                <div class="sidebar-logo">
+                                    <a href="#">Kontrolpanel</a>
+                                </div>
+                            </div>
+                            <ul class="sidebar-nav">
+                                @if (employee is not null && employee.Position.AccessLevel >= 4)
+                                {
+                                    <li class="sidebar-item">
+                                        <a href="/EmployeePages/EmployeeList" class="sidebar-link">
+                                            <i class="lni lni-user"></i>
+                                            <span>Medarbejdere</span>
+                                        </a>
+                                    </li>
+                                }
+                                <li class="sidebar-item">
+                                    <a href="/CustomerPages/CustomerList" class="sidebar-link">
+                                        <i class="lni lni-users"></i>
+                                        <span>Kunder</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="/AccountPages/AccountList" class="sidebar-link">
+                                        <i class="lni lni-line-double"></i>
+                                        <span>Konti</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </aside>
+                    </div>
+
+                    @RenderBody()
+
+                </main>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - BankApp - <a asp-area="" asp-page="/Privacy">Privacy</a>
@@ -79,8 +209,11 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

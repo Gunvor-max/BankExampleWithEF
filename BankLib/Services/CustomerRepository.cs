@@ -9,59 +9,17 @@ using System.Threading.Tasks;
 
 namespace BankLib.Services
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class CustomerRepository : ICustomerRepository
     {
         private EFContext _context;
-        public Employee Isloggedin { get; set; }
-        public EmployeeRepository() 
+        public CustomerRepository()
         {
             _context = new EFContext();
         }
-
-        public Employee Create(Employee theObject)
-        {
-            _context.BankExampleWithEfEmployees.Add(theObject);
-            _context.SaveChanges();
-            return theObject;
-        }
-
-        public Employee Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Employee> GetAll()
-        {
-            return _context.BankExampleWithEfEmployees
-        .Include(e => e.Address) // Include Address entity
-        .Include(e => e.Address.City) // Include City entity
-        .Include(e => e.Address.City.ZipCode) // Include Zipcode entity
-        .Include(e => e.Position) // Include Position entity
-        .Include(e => e.Department) // Include Department entity
-        .Include(e => e.MainAccount) // Include MainAccount entity;
-        .ToList();
-        }
-
-        public Employee? Read(int id)
-        {
-            return _context.BankExampleWithEfEmployees
-        .Include(e => e.Address) // Include Address entity
-        .Include(e => e.Address.City) // Include City entity
-        .Include(e => e.Address.City.ZipCode) // Include Zipcode entity
-        .Include(e => e.Position) // Include Position entity
-        .Include(e => e.Department) // Include Department entity
-        .Include(e => e.MainAccount) // Include MainAccount entity;
-        .FirstOrDefault(e => e.EmployeeId == id); // Find employee by ID
-        }
-
-        public Employee Update(Employee theObject, int id)
-        {
-            throw new NotImplementedException();
-        }
+        public Customer Isloggedin { get; set; }
 
         public bool CheckUser(string email, string password)
         {
-
             Isloggedin = GetAll().Find(x => x.Mail == email && x.Password == password);
             if (Isloggedin != null)
             {
@@ -70,16 +28,51 @@ namespace BankLib.Services
             return false;
         }
 
-        public List<Employee>? Search(string search)
+        public Customer Create(Customer theObject)
         {
-            return _context.BankExampleWithEfEmployees
+            _context.BankExampleWithEfCustomers.Add(theObject);
+            _context.SaveChanges();
+            return theObject;
+        }
+
+        public Customer Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Customer> GetAll()
+        {
+            return _context.BankExampleWithEfCustomers
         .Include(e => e.Address) // Include Address entity
         .Include(e => e.Address.City) // Include City entity
         .Include(e => e.Address.City.ZipCode) // Include Zipcode entity
-        .Include(e => e.Position) // Include Position entity
-        .Include(e => e.Department) // Include Department entity
+        .Include(e => e.MainAccount) // Include MainAccount entity;
+        .ToList();
+        }
+
+        public Customer? Read(int id)
+        {
+            return _context.BankExampleWithEfCustomers
+        .Include(e => e.Address) // Include Address entity
+        .Include(e => e.Address.City) // Include City entity
+        .Include(e => e.Address.City.ZipCode) // Include Zipcode entity
+        .Include(e => e.MainAccount) // Include MainAccount entity;
+        .FirstOrDefault(e => e.CustomerId == id); // Find employee by ID
+        }
+
+        public List<Customer> Search(string search)
+        {
+            return _context.BankExampleWithEfCustomers
+        .Include(e => e.Address) // Include Address entity
+        .Include(e => e.Address.City) // Include City entity
+        .Include(e => e.Address.City.ZipCode) // Include Zipcode entity
         .Include(e => e.MainAccount) // Include MainAccount entity;
         .Where(e => EF.Functions.Like(e.FirstName, $"%{search}%")).ToList(); // Find employee by ID
+        }
+
+        public Customer Update(Customer theObject, int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

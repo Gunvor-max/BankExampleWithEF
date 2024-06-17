@@ -1,16 +1,16 @@
-﻿using System;
+﻿using BankLib.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BankLib.Model;
 
 namespace BankLib.Services.Interfaces
 {
-    public interface IEmployeeRepository : IGenericCRUDInterface<Employee>
+    public interface ICustomerRepository : IGenericCRUDInterface<Customer>
     {
         bool CheckUser(string email, string password);
-        Employee Isloggedin {  get; }
-        List<Employee> Search(string search);
+        Customer Isloggedin { get; }
+        List<Customer> Search(string search);
     }
 }

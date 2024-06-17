@@ -17,8 +17,8 @@ input {
     display: none; /* Ensures the button is not visible but functional */
 }
 
-#employeeRow {
-    text-align:center;
+#customerRow {
+    text-align: center;
 }
 
 tr:hover {

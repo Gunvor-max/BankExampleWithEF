@@ -1,22 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.btn {
+    text-decoration: none
+}
+
+.btn-link {
+    color: grey;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+#personlogolist {
+    display: flex;
+}
+
+#personlistitem {
+    padding: 0 1px 0px 7px;
+}
+
+#personlogo {
+    display: flex;
+    padding-top: 4px;
+}
+
+#travellogo, #personlogolist {
+    /*  display: flex;
+    justify-content: center;
+    padding: 0px 2px 0px 2px;*/
+    list-style: none;
+    padding: 0;
+}
+
+#travellogonav {
+    background-color: #FCB937 !important;
+    z-index: 1;
+}
+
+#travellogotext {
+    margin: 0;
+}
+
+#hovertravellogo.btn-link:hover {
+    text-decoration: underline;
+    color: #000000;
+}
+
+#imageindex {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    width: -webkit-fill-available;
+    z-index: -2;
+    height: calc(100% - 66px);
+    /*    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    object-position: center;*/
+}
+
+#containerIndex {
+    display: flex;
+    position: absolute;
+    left: 25%;
+    right: 25%
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: white;
 }

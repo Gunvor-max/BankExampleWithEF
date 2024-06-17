@@ -1,8 +1,8 @@
 ﻿@page
-@model BankApp.Pages.EmployeePages.EmployeeListModel
+@model BankApp.Pages.AccountPages.AccountListModel
 @using BankLib.Model;
 @{
-    ViewData["Title"] = "Liste af medarbejdere";
+    ViewData["Title"] = "Liste af kunder";
     ViewData["SidebarVisible"] = true;
     bool isEditMode = Model.IsEditMode;
     bool isDeleteAble = Model.IsDeleteable;
@@ -16,16 +16,16 @@
 }
 <html>
 <head>
-    <link rel="stylesheet" href="~/css/EmployeeStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomerStyle.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container-fluid mt-3">
-        <h1>Medarbejdere</h1>
+        <h1>Kunder</h1>
         @if (isDeletedConfirmation)
         {
             <div class="alert-success">
                 <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu slettet fra systemet
+                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu slettet fra systemet
                 </h3>
             </div>
         }
@@ -33,7 +33,7 @@
         {
             <div class="alert-success">
                 <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu oprettet i systemet
+                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu oprettet i systemet
                 </h3>
             </div>
         }
@@ -41,7 +41,7 @@
         {
             <div class="alert-success">
                 <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu opdateret i systemet
+                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu opdateret i systemet
                 </h3>
             </div>
         }
@@ -50,51 +50,51 @@
                 <div class="col-md-6 custom-col">
 
                     <form method="post">
-                        <input class="form-control mb-3" type="text" asp-for="@Model.Search" placeholder="Søg i medarbejdere..." />
-                        <input type="submit" asp-page-handler="SearchEmployees" class="btn btn-primary visually-hidden" value="søg" />
+                        <input class="form-control mb-3" type="text" asp-for="@Model.Search" placeholder="Søg i kunder..." />
+                        <input type="submit" asp-page-handler="SearchCustomers" class="btn btn-primary visually-hidden" value="søg" />
                     </form>
 
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Medarbejder ID</th>
+                                <th>Kunde ID</th>
                                 <th>Fornavn</th>
                                 <th>Efternavn</th>
                                 <th>Mail</th>
-                                <th>Adgangsniveau</th>
+                                <th>Køn</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (Employee c in @Model.Employees)
+                            @foreach (Customer c in @Model.Customers)
                             {
 
-                                <form method="post" asp-page-handler="SelectEmployee" asp-route-Id="@c.EmployeeId" id="myForm">
-                                <tr class="clickable-row" id="employeeRow">
+                                <form method="post" asp-page-handler="SelectCustomer" asp-route-Id="@c.CustomerId" id="myForm">
+                                <tr class="clickable-row" id="customerRow">
                                     <td>
-                                                @c.EmployeeId
+                                            @c.CustomerId
                                     </td>
                                     <td>
-                                                @c.FirstName
+                                            @c.FirstName
                                     </td>
                                     <td>
-                                                @c.LastName
+                                            @c.LastName
                                     </td>
                                     <td>
-                                                @c.Mail
+                                            @c.Mail
                                     </td>
                                     <td>
-                                                @c.Position.AccessLevel
+                                            @c.Gender
                                     </td>
                                 </tr>
                                 </form>
                             }
                         </tbody>
                     </table>
-                        <script>
-                            $(".clickable-row").click(function () {
-                                $('#myForm').submit();  // Submit the form
-                            });
-                        </script>
+                    <script>
+                        $(".clickable-row").click(function () {
+                            $('#myForm').submit();  // Submit the form
+                        });
+                    </script>
                 </div>
                 <div class="col-md-6 custom-col">
                     <form method="post">
@@ -150,35 +150,8 @@
                                 </div>
                             </div>
                         </div>
-                        <h4>Arbejdsrelaterede oplysninger:</h4>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_Title" asp-for="Choosen_Title" minlength="2" maxlength="100" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_Title" for="floatingInput">Titel</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_PositionDescription" asp-for="Choosen_PositionDescription" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_PositionDescription" for="floatingInput">Arbejds Beskrivelse</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_DepartmentName" asp-for="Choosen_DepartmentName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_DepartmentName" for="floatingInput">Afdeling</label>
-                                </div>
-                                <div class="form-floating mt-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_DepartmentDescription" asp-for="Choosen_DepartmentDescription" minlength="1" max="50" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_DepartmentDescription" for="floatingInput">Afdelings Beskrivelse</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="number" class="form-control" id="floatingInput" min="1" max="5" value="@Model.Choosen_AccessLevel" min="1" max="5" required asp-for="Choosen_AccessLevel" readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_AccessLevel" for="floatingInput">Adgangsniveau</label>
-                                </div>
                                 @if (canSetPassWord)
                                 {
                                     <div class="form-floating mt-3">
@@ -187,35 +160,28 @@
                                     </div>
                                 }
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_ImagePath" asp-for="Choosen_ImagePath" minlength="3" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_ImagePath" for="floatingInput">Billede streng</label>
-                                </div>
-                            </div>
-
                         </div>
                         @if (isEditMode)
                         {
                             @if (isEditTriggered)
                             {
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">Gem ændringer</button>
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.CustomerID" data-employee-id="@Model.CustomerID">Gem ændringer</button>
                                 <!-- PartielView to trigger the EmployeeUpdate modal-->
                                 @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
                             }
                         }
                         else if (isDeleteAble)
                         {
-                            <button type="submit" asp-page-handler="EnableEdit" asp-route-id="@Model.EmployeeId" asp-route-accessLevel="@Model.Choosen_AccessLevel" class="btn btn-outline-warning">Ret</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">X</button>
+                            <button type="submit" asp-page-handler="EnableEdit" asp-route-id="@Model.CustomerID" class="btn btn-outline-warning">Ret</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.CustomerID" data-employee-id="@Model.CustomerID">X</button>
                         }
                         @if (!isEditMode)
                         {
-                            <button type="submit" asp-page-handler="ActivateCreateEmployee" class="btn btn-success">Opret Medarbejder</button>
+                            <button type="submit" asp-page-handler="ActivateCreateCustomer" class="btn btn-success">Opret Kunde</button>
                         }
                         else
                         {
-                            <button type="submit" asp-page-handler="CreateEmployee" class="btn btn-success">Opret Medarbejder</button>
+                            <button type="submit" asp-page-handler="CreateCustomer" class="btn btn-success">Opret Kunde</button>
                         }
                         <!-- PartielView to trigger the EmployeeDelete modal-->
                         @*  <partial name="PartialView/ModalEmployeeDelete" /> *@

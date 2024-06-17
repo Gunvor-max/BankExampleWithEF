@@ -11,6 +11,26 @@ namespace BankLib.Model;
 [Table("BankExampleWithEF_Customer")]
 public partial class Customer
 {
+    public Customer(int customerId, int addressId, int mainAccountId, string firstName, string lastName, string mail, string phoneNumber, string password, string gender, bool isDeleted, Address address, MainAccount mainAccount)
+    {
+        CustomerId = customerId;
+        AddressId = addressId;
+        MainAccountId = mainAccountId;
+        FirstName = firstName;
+        LastName = lastName;
+        Mail = mail;
+        PhoneNumber = phoneNumber;
+        Password = password;
+        Gender = gender;
+        IsDeleted = isDeleted;
+        Address = address;
+        MainAccount = mainAccount;
+    }
+
+    public Customer():this(0,0,0,"DefaultCustomer","DefaultCustomerLastName","DefaultCustomerMail@dk","DefaultPhonenumber","DefaultPassword","DefaultGender",false,new Address(),new MainAccount())
+    { 
+    }
+
     [Key]
     [Column("Customer_Id")]
     public int CustomerId { get; set; }
