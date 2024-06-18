@@ -68,8 +68,8 @@
                             @foreach (Employee c in @Model.Employees)
                             {
 
-                                <form method="post" asp-page-handler="SelectEmployee" asp-route-Id="@c.EmployeeId" id="myForm">
                                 <tr class="clickable-row" id="employeeRow">
+                                <form method="post" asp-page-handler="SelectEmployee" asp-route-Id="@c.EmployeeId" id="@c.EmployeeId">
                                     <td>
                                                 @c.EmployeeId
                                     </td>
@@ -85,15 +85,17 @@
                                     <td>
                                                 @c.Position.AccessLevel
                                     </td>
-                                </tr>
                                 </form>
+                                </tr>
                             }
                         </tbody>
                     </table>
                         <script>
-                            $(".clickable-row").click(function () {
-                                $('#myForm').submit();  // Submit the form
-                            });
+                        $(".clickable-row").click(function () {
+                            var clickedRow = $(this); // Get the clicked row element
+                            var formToSubmit = clickedRow.find("form"); // Find the form within the row
+                            formToSubmit.submit(); // Submit the found form
+                        });
                         </script>
                 </div>
                 <div class="col-md-6 custom-col">

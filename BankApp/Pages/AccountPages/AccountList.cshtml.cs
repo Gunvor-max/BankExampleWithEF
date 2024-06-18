@@ -2,18 +2,21 @@ using BankLib.Model;
 using BankLib.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Identity.Client;
 
 namespace BankApp.Pages.AccountPages
 {
     public class AccountListModel : PageModel
     {
         private readonly ICustomerRepository _customerRepository;
-        public CustomerListModel(ICustomerRepository customerRepository)
+        private readonly IAccountRepository _accountRepository;
+        public AccountListModel(ICustomerRepository customerRepository, IAccountRepository accountRepository)
         {
             _customerRepository = customerRepository;
-            Customers = _customerRepository.GetAll();
+            _accountRepository = accountRepository;
+            Accounts = _accountRepository.GetAll();
         }
-        public List<Customer> Customers { get; set; }
+        public List<Account> Accounts { get; set; }
 
         [BindProperty]
         public string? Search { get; set; }
@@ -25,24 +28,15 @@ namespace BankApp.Pages.AccountPages
         public string Choosen_FirstName { get; set; }
         [BindProperty]
         public string Choosen_LastName { get; set; }
-        [BindProperty]
-        public string Choosen_Mail { get; set; }
-        [BindProperty]
-        public string Choosen_PhoneNumber { get; set; }
-        [BindProperty]
-        public string Choosen_Password { get; set; }
-        [BindProperty]
-        public string Choosen_Gender { get; set; }
 
-        //Addressbind
+
+        //Accountbind
         [BindProperty]
-        public string Choosen_StreetName { get; set; }
+        public int AccountID { get; set; }
         [BindProperty]
-        public int Choosen_HouseNumber { get; set; }
+        public string Choosen_AccountName {  get; set; }
         [BindProperty]
-        public string Choosen_City { get; set; }
-        [BindProperty]
-        public int Choosen_ZipCode { get; set; }
+        public string Choosen_AccountType { get; set; }
 
         public bool IsEditMode { get; set; } = false;
         public bool IsDeleteable { get; set; } = false;
@@ -66,7 +60,7 @@ namespace BankApp.Pages.AccountPages
                 {
                     Response.Redirect("/LoginPages/Login");
                 }
-                Customers = _customerRepository.GetAll();
+                Accounts = _accountRepository.GetAll();
             }
             else
             {
@@ -74,51 +68,63 @@ namespace BankApp.Pages.AccountPages
             }
         }
 
-        public void OnPostSearchCustomers()
+        public Customer GetCustomerFromMainAccount(int mainAccountId)
         {
-            Customers = _customerRepository.Search(Search);
+            var customer = _customerRepository.GetAll().FirstOrDefault(ma => ma.MainAccountId == mainAccountId);
+            return customer;
         }
 
-        public void OnPostSelectCustomer(int Id)
+        public IActionResult OnPostSearchAccounts()
         {
-            Customer customer = _customerRepository.Read(Id);
-
-            if (Id != 0)
+            var listcustomers = _customerRepository.Search(Search);
+            foreach (var customer in listcustomers) 
             {
-                if (customer is not null)
+                Accounts = _accountRepository.ReadAccountsConnectedToMain(customer.MainAccountId);
+                return Page();
+            }
+            Accounts = new List<Account>();
+            return Page();
+        }
+
+        public void OnPostSelectAccount(int accountId)
+        {
+            Account choosenAccount = _accountRepository.Read(accountId);
+
+            if (accountId != 0)
+            {
+                if (choosenAccount is not null)
                 {
                     //Customer
+                    var customer = _customerRepository.GetAll().First(ma => ma.MainAccountId == choosenAccount.MainAccountId);
                     CustomerID = customer.CustomerId;
                     Choosen_FirstName = customer.FirstName;
                     Choosen_LastName = customer.LastName;
-                    Choosen_Mail = customer.Mail;
-                    Choosen_PhoneNumber = customer.PhoneNumber;
-                    Choosen_Gender = customer.Gender;
-                    Choosen_Password = customer.Password;
-                    //Address
-                    Choosen_StreetName = customer.Address.StreetName;
-                    Choosen_HouseNumber = customer.Address.HouseNumber;
-                    Choosen_City = customer.Address.City.CityName;
-                    Choosen_ZipCode = customer.Address.City.ZipCode.ZipCode;
+
+                    //Account
+                    AccountID = choosenAccount.AccountId;
+                    Choosen_AccountName = choosenAccount.Name;
+                    Choosen_AccountType = choosenAccount.Type;
                 }
             }
             IsEditMode = false;
             IsDeleteable = true;
         }
 
-        public void OnPostEnableEdit(int Id)
+        public void OnPostEnableEdit(int accountId)
         {
             bool isEmployee = true;
 
-            Customer customer = _customerRepository.Read(Id);
+            Account choosenAccount = _accountRepository.Read(accountId);
+            //Customer
+            var customer = _customerRepository.GetAll().First(ma => ma.MainAccountId == choosenAccount.MainAccountId);
+            CustomerID = customer.CustomerId;
+            Choosen_FirstName = customer.FirstName;
+            Choosen_LastName = customer.LastName;
 
-            if (Id != 0)
-            {
-                if (customer is not null)
-                {
-                    CustomerID = customer.CustomerId;
-                }
-            }
+            //Account
+            AccountID = choosenAccount.AccountId;
+            Choosen_AccountName = choosenAccount.Name;
+            Choosen_AccountType = choosenAccount.Type;
 
             IsEditMode = true;
             IsEditTriggered = true;
@@ -131,27 +137,27 @@ namespace BankApp.Pages.AccountPages
 
         public void OnPostUpdateCustomer(int id)
         {
-            bool isEmployee = true;
+            //bool isEmployee = true;
 
-            Customer customer = _customerRepository.Read(id);
+            //Customer customer = _customerRepository.Read(id);
 
-            if (id != 0)
-            {
-                if (customer is not null)
-                {
-                    customer.FirstName = Choosen_FirstName;
-                    customer.LastName = Choosen_LastName;
-                    customer.Mail = Choosen_Mail;
-                    customer.PhoneNumber = Choosen_PhoneNumber;
-                    customer.Address.StreetName = Choosen_StreetName;
-                    customer.Address.HouseNumber = Choosen_HouseNumber;
-                    customer.Address.City.CityName = Choosen_City;
-                    customer.Address.City.ZipCode.ZipCode = Choosen_ZipCode;
-                    ShowCustomer = _customerRepository.Update(customer, id);
-                    Customers = _customerRepository.GetAll();
-                    IsUpdatedConfirmation = true;
-                }
-            }
+            //if (id != 0)
+            //{
+            //    if (customer is not null)
+            //    {
+            //        customer.FirstName = Choosen_FirstName;
+            //        customer.LastName = Choosen_LastName;
+            //        customer.Mail = Choosen_Mail;
+            //        customer.PhoneNumber = Choosen_PhoneNumber;
+            //        customer.Address.StreetName = Choosen_StreetName;
+            //        customer.Address.HouseNumber = Choosen_HouseNumber;
+            //        customer.Address.City.CityName = Choosen_City;
+            //        customer.Address.City.ZipCode.ZipCode = Choosen_ZipCode;
+            //        ShowCustomer = _customerRepository.Update(customer, id);
+            //        Customers = _customerRepository.GetAll();
+            //        IsUpdatedConfirmation = true;
+            //    }
+            //}
         }
 
         public void OnPostActivateCreateCustomerAgent()
@@ -167,19 +173,19 @@ namespace BankApp.Pages.AccountPages
         }
         public void OnPostCreateCustomer()
         {
-            Customer newcustomer = new Customer
-            {
-                FirstName = Choosen_FirstName,
-                LastName = Choosen_LastName,
-                Mail = Choosen_Mail,
-                PhoneNumber = Choosen_PhoneNumber,
-                Password = Choosen_Password,
-                Gender = Choosen_Gender,
-                Address = new Address(0, 0, Choosen_StreetName, Choosen_HouseNumber, new City(0, 0, Choosen_City, new ZipCodeTable(0, Choosen_ZipCode))),
-            };
-            ShowCustomer = _customerRepository.Create(newcustomer);
-            Customers = _customerRepository.GetAll();
-            IsCreatedConfirmation = true;
+            //Customer newcustomer = new Customer
+            //{
+            //    FirstName = Choosen_FirstName,
+            //    LastName = Choosen_LastName,
+            //    Mail = Choosen_Mail,
+            //    PhoneNumber = Choosen_PhoneNumber,
+            //    Password = Choosen_Password,
+            //    Gender = Choosen_Gender,
+            //    Address = new Address(0, 0, Choosen_StreetName, Choosen_HouseNumber, new City(0, 0, Choosen_City, new ZipCodeTable(0, Choosen_ZipCode))),
+            //};
+            //ShowCustomer = _customerRepository.Create(newcustomer);
+            //Customers = _customerRepository.GetAll();
+            //IsCreatedConfirmation = true;
         }
     }
 }

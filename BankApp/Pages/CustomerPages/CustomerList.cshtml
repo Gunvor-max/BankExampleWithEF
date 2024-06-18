@@ -68,8 +68,8 @@
                             @foreach (Customer c in @Model.Customers)
                             {
 
-                                <form method="post" asp-page-handler="SelectCustomer" asp-route-Id="@c.CustomerId" id="myForm">
                                 <tr class="clickable-row" id="customerRow">
+                                <form method="post" asp-page-handler="SelectCustomer" asp-route-Id="@c.CustomerId" id="@c.CustomerId">
                                     <td>
                                             @c.CustomerId
                                     </td>
@@ -85,14 +85,16 @@
                                     <td>
                                             @c.Gender
                                     </td>
-                                </tr>
                                 </form>
+                                </tr>
                             }
                         </tbody>
                     </table>
                     <script>
                         $(".clickable-row").click(function () {
-                            $('#myForm').submit();  // Submit the form
+                            var clickedRow = $(this); // Get the clicked row element
+                            var formToSubmit = clickedRow.find("form"); // Find the form within the row
+                            formToSubmit.submit(); // Submit the found form
                         });
                     </script>
                 </div>
@@ -174,6 +176,7 @@
                         {
                             <button type="submit" asp-page-handler="EnableEdit" asp-route-id="@Model.CustomerID" class="btn btn-outline-warning">Ret</button>
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.CustomerID" data-employee-id="@Model.CustomerID">X</button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalCreateAccount-@Model.CustomerID" data-employee-id="@Model.CustomerID">Opret Konto</button>
                         }
                         @if (!isEditMode)
                         {
@@ -185,8 +188,9 @@
                         }
                         <!-- PartielView to trigger the EmployeeDelete modal-->
                         @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
-
                     </form>
+                        <!-- PartielView to trigger the CreateAccount modal-->
+                        <partial name="PartialViews/ModalCreateAccount" />
                 </div>
             </div>
         </div>

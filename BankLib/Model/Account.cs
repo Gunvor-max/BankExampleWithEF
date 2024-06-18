@@ -11,7 +11,7 @@ namespace BankLib.Model;
 [Table("BankExampleWithEF_Account")]
 public partial class Account
 {
-    public Account(int accountId, int mainAccountId, string name, string type, int balance, decimal interestrate, MainAccount mainAccount)
+    public Account(int accountId, int mainAccountId, string name, string type, int balance, decimal interestrate)
     {
         AccountId = accountId;
         MainAccountId = mainAccountId;
@@ -19,10 +19,9 @@ public partial class Account
         Type = type;
         Balance = balance;
         Interestrate = interestrate;
-        MainAccount = mainAccount;
     }
 
-    public Account():this(0,0,"DefaultAccount","DefaultType",0,0,new MainAccount())
+    public Account():this(0,0,"DefaultAccount","DefaultType",0,0)
     {
         
     }

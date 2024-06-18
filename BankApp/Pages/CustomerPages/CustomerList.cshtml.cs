@@ -8,9 +8,11 @@ namespace BankApp.Pages.CustomerPages
     public class CustomerListModel : PageModel
     {
         private readonly ICustomerRepository _customerRepository;
-        public CustomerListModel(ICustomerRepository customerRepository)
+        private readonly IAccountRepository _accountRepository;
+        public CustomerListModel(ICustomerRepository customerRepository, IAccountRepository accountRepository)
         {
             _customerRepository = customerRepository;
+            _accountRepository = accountRepository;
             Customers = _customerRepository.GetAll();
         }
         public List<Customer> Customers { get; set; }
@@ -43,6 +45,12 @@ namespace BankApp.Pages.CustomerPages
         public string Choosen_City { get; set; }
         [BindProperty]
         public int Choosen_ZipCode { get; set; }
+
+        //AccountBind
+        [BindProperty]
+        public string Choosen_AccountName { get; set; }
+        [BindProperty]
+        public string Choosen_AccountType { get; set; }
 
         public bool IsEditMode { get; set; } = false;
         public bool IsDeleteable { get; set; } = false;
@@ -180,6 +188,19 @@ namespace BankApp.Pages.CustomerPages
             ShowCustomer = _customerRepository.Create(newcustomer);
             Customers = _customerRepository.GetAll();
             IsCreatedConfirmation = true;
+        }
+
+        public void OnPostCreateAccount(int id) 
+        {
+            var customer = _customerRepository.Read(id);
+            Account newaccount = new Account
+            {
+                Name = Choosen_AccountName,
+                Type = Choosen_AccountType,
+                MainAccountId = customer.MainAccountId
+            };
+
+            _accountRepository.Create(newaccount);
         }
     }
 }
