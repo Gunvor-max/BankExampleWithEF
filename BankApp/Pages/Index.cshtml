@@ -32,6 +32,10 @@
         ViewData["SidebarVisible"] = true;
 
     }
+    else if (customer is not null)
+    {
+        ViewData["SidebarVisibleCustomer"] = true;
+    }
 }
 
 <div class="text-center">

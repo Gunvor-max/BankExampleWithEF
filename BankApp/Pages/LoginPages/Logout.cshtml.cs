@@ -12,9 +12,18 @@ namespace BankApp.Pages.LoginPages
 
         public IActionResult OnGet()
         {
-            Employee employee = null!;
-            SessionHelper.Get(employee, HttpContext);
-            SessionHelper.Clear(employee, HttpContext);
+            object? user = null;
+            user = SessionHelper.Get<object>(user, HttpContext);
+            if (user.ToString().Contains("AccessLevel"))
+            {
+                Employee employee = null!;
+                SessionHelper.Clear(employee, HttpContext);
+            }
+            else
+            {
+                Customer customer = null!;
+                SessionHelper.Clear(customer, HttpContext);
+            }
 
             return Redirect("/Index");
         }

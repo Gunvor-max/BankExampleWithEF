@@ -8,6 +8,7 @@ namespace BankApp.Pages.LoginPages
     public class LoginModel : PageModel
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICustomerRepository _customerRepository;
 
         [Required(ErrorMessage = "Email er påkrævet.")]
         [EmailAddress(ErrorMessage = "Indtast en gyldig email.")]
@@ -21,9 +22,10 @@ namespace BankApp.Pages.LoginPages
 
         public string ErrorMessage { get; set; }
 
-        public LoginModel(IEmployeeRepository employeeRepository)
+        public LoginModel(IEmployeeRepository employeeRepository, ICustomerRepository customerRepository)
         {
-          _employeeRepository = employeeRepository;
+            _employeeRepository = employeeRepository;
+            _customerRepository = customerRepository;
         }
 
         public void OnGet()
@@ -40,6 +42,11 @@ namespace BankApp.Pages.LoginPages
             {
                 //If true sets session from the user object in IsloggedIn
                 SessionHelper.Set(_employeeRepository.Isloggedin, HttpContext);
+                return RedirectToPage("/Index");
+            }
+            else if (_customerRepository.CheckUser(Email, Password))
+            {  
+                SessionHelper.Set(_customerRepository.Isloggedin, HttpContext);
                 return RedirectToPage("/Index");
             }
             
