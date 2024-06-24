@@ -193,6 +193,54 @@
             </div>
         </div>
     }
+    else if (ViewData["SidebarVisibleCustomer"] as bool? ?? false)
+    {
+        <div class="d-flex flex-column min-vh-100">
+            <!--- Main content --->
+            <div class="flex-grow-1">
+                <main role="main" class="pb-3" style="display: flex;">
+
+                    <div class="d-flex" style="min-height: 100vh;">
+                        <aside id="sidebar">
+                            <div class="d-flex">
+                                <input type="checkbox" id="toggle-sidebar" class="toggle-checkbox" hidden>
+                                <!-- Label that acts as the button, associating with the checkbox -->
+                                <label for="toggle-sidebar" class="toggle-btn" style="height: auto;">
+                                    <i class="lni lni-grid-alt"></i>
+                                </label>
+                                <div class="sidebar-logo">
+                                    <a href="#">Kontrolpanel</a>
+                                </div>
+                            </div>
+                            <ul class="sidebar-nav">
+                                    <li class="sidebar-item">
+                                        <a href="" class="sidebar-link">
+                                            <i class="lni lni-user"></i>
+                                            <span>Overblik</span>
+                                        </a>
+                                    </li>
+                                <li class="sidebar-item">
+                                    <a href="" class="sidebar-link">
+                                        <i class="lni lni-users"></i>
+                                        <span>Investering</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="" class="sidebar-link">
+                                        <i class="lni lni-line-double"></i>
+                                        <span>Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </aside>
+                    </div>
+
+                    @RenderBody()
+
+                </main>
+            </div>
+        </div>
+    }
     else
     {
         <div class="container">

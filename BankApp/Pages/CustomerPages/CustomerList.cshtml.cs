@@ -64,13 +64,13 @@ namespace BankApp.Pages.CustomerPages
         public void OnGet()
         {
             //Check if the user has the proper accesslevel to view the page
-            object user = null;
+            object? user = null;
             if (SessionHelper.Get<object>(user, HttpContext)?.ToString()?.Contains("AccessLevel") ?? false)
             {
                 //Session is retrieved as an employee object, and further restrictions can be set depending on accesslevel
-                Employee employee = null;
+                Employee? employee = null;
                 employee = SessionHelper.Get<Employee>(employee, HttpContext);
-                if (employee.Position.AccessLevel < 4)
+                if (employee?.Position.AccessLevel < 4)
                 {
                     Response.Redirect("/LoginPages/Login");
                 }
