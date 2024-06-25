@@ -219,18 +219,21 @@
                                 {
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">Gem ændringer</button>
                                     <!-- PartielView to trigger the EmployeeUpdate modal-->
-                                    @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
+                                    <partial name="PartialViews/ModalEmployeeUpdate" />
                                 }
-                                    <button type="submit" asp-page-handler="CreateEmployee" class="btn btn-success">Opret Medarbejder det virker</button>
+                                @if(isChoosen)
+                                {
+                                    <button type="submit" asp-page-handler="CreateEmployee" class="btn btn-success">Opret Medarbejder</button>
+                                }
                             }
                             else if (isDeleteAble)
                             {
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button id="editAndDelete" type="submit" asp-page-handler="EnableEdit" asp-route-id="@Model.EmployeeId" asp-route-accessLevel="@Model.Choosen_AccessLevel" class="btn block editbtn">Ret</button>
+                                        <button id="editanddelete" type="submit" asp-page-handler="EnableEdit" asp-route-id="@Model.EmployeeId" class="btn btn-outline-warning">Ret</button>
                                     </div>
                                     <div class="col-md-12">
-                                        <button id="editAndDelete" type="button" class="btn block deletebtn" data-bs-toggle="modal" data-bs-target="#myModal-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">Slet</button>
+                                        <button id="editanddelete" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">Slet</button>
                                     </div>
                             </div>
                             }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,9 +55,35 @@ namespace BankLib.Services
         .FirstOrDefault(e => e.EmployeeId == id); // Find employee by ID
         }
 
-        public Employee Update(Employee theObject, int id)
+        public Employee? Update(Employee theObject, int id)
         {
-            throw new NotImplementedException();
+            Employee? currentemployee = _context.BankExampleWithEfEmployees.FirstOrDefault(e => e.EmployeeId == id);
+            //use reflection to map the new informations from the object to the existing object in the database
+            var newproperties = theObject.GetType().GetProperties();
+            var existingproperties = currentemployee.GetType().GetProperties();
+
+            if (currentemployee != null)
+                {
+                    foreach (var property in newproperties)
+                    {
+                        // Check if the property can be written to
+                        if (property.CanWrite)
+                        {
+                            var newValue = property.GetValue(theObject);
+                        // Only update the property if the new value is not null
+                        var existingValue = property.GetValue(currentemployee);
+                        // Only update the property if the new value is not null and different from the existing value
+                        if (newValue != null && !newValue.Equals(existingValue))
+                        {
+                            property.SetValue(currentemployee, newValue);
+                        }
+                    }
+                    }
+                    // Save changes to the database
+                    _context.SaveChanges();
+                }
+
+            return currentemployee;
         }
 
         public bool CheckUser(string email, string password)

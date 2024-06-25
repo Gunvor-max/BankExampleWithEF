@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BankLib.Model;
 using System.Net;
+using System.Reflection;
 
 namespace BankApp.Pages.EmployeePages
 {
@@ -136,7 +137,6 @@ namespace BankApp.Pages.EmployeePages
 
         public void OnPostEnableEdit(int Id)
         {
-            bool isEmployee = true;
 
                 Employee employee = _employeeRepository.Read(Id);
 
@@ -144,12 +144,33 @@ namespace BankApp.Pages.EmployeePages
                 {
                     if (employee is not null)
                     {
-                        EmployeeId = employee.EmployeeId;
-                    }
+                    //Employee
+                    EmployeeId = employee.EmployeeId;
+                    Choosen_FirstName = employee.FirstName;
+                    Choosen_LastName = employee.LastName;
+                    Choosen_Mail = employee.Mail;
+                    Choosen_PhoneNumber = employee.PhoneNumber;
+                    Choosen_Gender = employee.Gender;
+                    Choosen_Password = employee.Password;
+                    Choosen_ImagePath = employee.ImagePath;
+                    //Address
+                    Choosen_StreetName = employee.Address.StreetName;
+                    Choosen_HouseNumber = employee.Address.HouseNumber;
+                    Choosen_City = employee.Address.City.CityName;
+                    Choosen_ZipCode = employee.Address.City.ZipCode.ZipCode;
+                    //Position
+                    Choosen_Title = employee.Position.Title;
+                    Choosen_PositionDescription = employee.Position.Description;
+                    Choosen_AccessLevel = employee.Position.AccessLevel;
+                    //Department
+                    Choosen_DepartmentName = employee.Department.Name;
+                    Choosen_DepartmentDescription = employee.Department.Description;
+                }
                 }
 
             IsEditMode = true;
             IsEditTriggered = true;
+            IsChoosen = true;
         }
 
         public void OnPostDeleteEmployee(int id)
@@ -159,8 +180,6 @@ namespace BankApp.Pages.EmployeePages
 
         public void OnPostUpdateEmployee(int id)
         {
-            bool isEmployee = true;
-
                 Employee employee = _employeeRepository.Read(id);
 
                 if (id != 0)
@@ -171,10 +190,17 @@ namespace BankApp.Pages.EmployeePages
                         employee.LastName = Choosen_LastName;
                         employee.Mail = Choosen_Mail;
                         employee.PhoneNumber = Choosen_PhoneNumber;
+                        employee.Gender = Choosen_Gender;
+                        employee.ImagePath = Choosen_ImagePath;
                         employee.Address.StreetName = Choosen_StreetName;
                         employee.Address.HouseNumber = Choosen_HouseNumber;
                         employee.Address.City.CityName = Choosen_City;
                         employee.Address.City.ZipCode.ZipCode = Choosen_ZipCode;
+                        employee.Position.Title = Choosen_Title;
+                        employee.Position.Description = Choosen_PositionDescription;
+                        employee.Position.AccessLevel = Choosen_AccessLevel;
+                        employee.Department.Name = Choosen_DepartmentName;
+                        employee.Department.Description = Choosen_DepartmentDescription;
                         ShowEmployee = _employeeRepository.Update(employee, id);
                         Employees = _employeeRepository.GetAll();
                         IsUpdatedConfirmation = true;

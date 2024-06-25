@@ -1,0 +1,23 @@
+﻿@{
+}
+<!-- Update Modal -->
+<div id="myModalUpdate-@Model.EmployeeId" class="modal fade" tabindex="-1" aria-labelledby="modalLabel-@Model.EmployeeId" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100" id="modalLabel-@Model.EmployeeId">Opdater Medarbejder</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                Er du sikker på at du vil ændre Medarbejderen:
+                <p style="font-weight:bold"> @Model.FirstName @Model.LastName</p>
+            </div>
+            <!--Modal buttons -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Fortryd</button>
+                <button type="submit" asp-page-handler="UpdateEmployee" class="btn btn-success" asp-route-id="@Model.EmployeeId" asp-route-accessLevel="@Model.AccessLevel">Gem ændringer</button>
+            </div>
+        </div>
+    </div>
+</div>
