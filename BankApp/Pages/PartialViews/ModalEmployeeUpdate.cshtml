@@ -11,12 +11,12 @@
             </div>
             <div class="modal-body text-center">
                 Er du sikker på at du vil ændre Medarbejderen:
-                <p style="font-weight:bold"> @Model.FirstName @Model.LastName</p>
+                <p style="font-weight:bold"> @Model.Choosen_FirstName @Model.Choosen_LastName</p>
             </div>
             <!--Modal buttons -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Fortryd</button>
-                <button type="submit" asp-page-handler="UpdateEmployee" class="btn btn-success" asp-route-id="@Model.EmployeeId" asp-route-accessLevel="@Model.AccessLevel">Gem ændringer</button>
+                <button type="submit" asp-page-handler="UpdateEmployee" class="btn btn-success" asp-route-id="@Model.EmployeeId">Gem ændringer</button>
             </div>
         </div>
     </div>

@@ -57,33 +57,9 @@ namespace BankLib.Services
 
         public Employee? Update(Employee theObject, int id)
         {
-            Employee? currentemployee = _context.BankExampleWithEfEmployees.FirstOrDefault(e => e.EmployeeId == id);
-            //use reflection to map the new informations from the object to the existing object in the database
-            var newproperties = theObject.GetType().GetProperties();
-            var existingproperties = currentemployee.GetType().GetProperties();
-
-            if (currentemployee != null)
-                {
-                    foreach (var property in newproperties)
-                    {
-                        // Check if the property can be written to
-                        if (property.CanWrite)
-                        {
-                            var newValue = property.GetValue(theObject);
-                        // Only update the property if the new value is not null
-                        var existingValue = property.GetValue(currentemployee);
-                        // Only update the property if the new value is not null and different from the existing value
-                        if (newValue != null && !newValue.Equals(existingValue))
-                        {
-                            property.SetValue(currentemployee, newValue);
-                        }
-                    }
-                    }
-                    // Save changes to the database
-                    _context.SaveChanges();
-                }
-
-            return currentemployee;
+            _context.BankExampleWithEfEmployees.Update(theObject);
+            _context.SaveChanges();
+            return theObject;
         }
 
         public bool CheckUser(string email, string password)
