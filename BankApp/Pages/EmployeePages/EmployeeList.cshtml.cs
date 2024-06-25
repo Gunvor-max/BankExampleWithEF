@@ -70,6 +70,7 @@ namespace BankApp.Pages.EmployeePages
         public bool IsCreatedConfirmation { get; set; } = false;
         public bool IsUpdatedConfirmation { get; set; } = false;
         public bool CanSetPassword { get; set; } = false;
+        public bool IsChoosen { get; set; } = false;
         public void OnGet()
         {
             //Check if the user has the proper accesslevel to view the page
@@ -130,6 +131,7 @@ namespace BankApp.Pages.EmployeePages
             }
             IsEditMode = false;
             IsDeleteable = true;
+            IsChoosen = true;
         }
 
         public void OnPostEnableEdit(int Id)
@@ -190,6 +192,7 @@ namespace BankApp.Pages.EmployeePages
         {
             IsEditMode = true;
             CanSetPassword = true;
+            IsChoosen = true;
         }
         public void OnPostCreateEmployee()
         {

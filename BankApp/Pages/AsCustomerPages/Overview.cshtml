@@ -53,7 +53,14 @@
 </head>
 <body>
     <div class="container-fluid mt-3">
+        @if(employee is not null)
+        {
+            <h1>@employee.FirstName Konti</h1>
+        }
+        else
+        {
         <h1>Konti</h1>
+        }
         @if (isDeletedConfirmation)
         {
             <div class="alert-success">

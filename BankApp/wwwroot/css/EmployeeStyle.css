@@ -62,3 +62,15 @@ PaymentFormBtn {
     z-index: 999;
     background-color: white;
 }
+
+#editAndDelete {
+    width: -webkit-fill-available;
+    background-color: #0e2238 !important;
+    color: #bdacb1 !important;
+}
+.editbtn:hover {
+    background-color: yellow !important;
+}
+.deletebtn:hover {
+    background-color:red !important;
+}

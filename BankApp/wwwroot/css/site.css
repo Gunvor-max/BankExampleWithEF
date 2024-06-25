@@ -19,7 +19,9 @@ html {
 }
 
 .btn-link {
-    color: grey;
+    color: whitesmoke !important;
+    text-decoration:none !important;
+
 }
 
 html {
@@ -80,6 +82,10 @@ body {
     height: 500px;
     object-fit: cover;
     object-position: center;*/
+}
+
+.navbar-brand {
+    color: #bdacb1 !important
 }
 
 #containerIndex {

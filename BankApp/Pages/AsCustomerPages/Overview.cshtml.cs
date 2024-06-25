@@ -14,8 +14,17 @@ namespace BankApp.Pages.AsCustomerPages
         {
             _customerRepository = customerRepository;
             _accountRepository = accountRepository;
+            //Get acounts connected to either employee or customer
+            if (employeeLoggedIn is not null || customerLoggedIn is not null)
+            {
+                var customerOrEmployee = employeeLoggedIn is not null ? _accountRepository.ReadAccountsConnectedToMain(employeeLoggedIn.MainAccountId) :
+                                                            _accountRepository.ReadAccountsConnectedToMain(customerLoggedIn.MainAccountId);
+                Accounts = customerOrEmployee;
+            }
         }
         public List<Account> Accounts { get; set; }
+        public static Employee? employeeLoggedIn { get; set; }
+        public static Customer? customerLoggedIn { get; set; }
 
         [BindProperty]
         public string? Search { get; set; }
@@ -53,15 +62,13 @@ namespace BankApp.Pages.AsCustomerPages
             if (SessionHelper.Get<object>(user, HttpContext)?.ToString()?.Contains("AccessLevel") ?? false)
             {
                 //Session is retrieved as an employee object, and further restrictions can be set depending on accesslevel
-                Employee? employee = null;
-                employee = SessionHelper.Get<Employee>(employee, HttpContext);
-                Accounts = _accountRepository.ReadAccountsConnectedToMain(employee.MainAccountId);
+                employeeLoggedIn = SessionHelper.Get<Employee>(employeeLoggedIn, HttpContext);
+                Accounts = _accountRepository.ReadAccountsConnectedToMain(employeeLoggedIn.MainAccountId);
             }
             else if(SessionHelper.Get<object>(user, HttpContext) is not null)
             {
-                Customer? customer = null;
-                customer = SessionHelper.Get<Customer>(customer, HttpContext);
-                Accounts = _accountRepository.ReadAccountsConnectedToMain(customer.MainAccountId);
+                customerLoggedIn = SessionHelper.Get<Customer>(customerLoggedIn, HttpContext);
+                Accounts = _accountRepository.ReadAccountsConnectedToMain(customerLoggedIn.MainAccountId);
             }
             else
             {
