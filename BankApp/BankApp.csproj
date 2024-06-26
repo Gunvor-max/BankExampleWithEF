@@ -7,7 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\PartialViews\ModalEmployeeDelete.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BankLib\BankLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\PartialViews\ModalEmployeeDelete.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\PartialViews\ModalEmployeeDelete.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\PartialViews\ModalEmployeeDelete.cshtml" />
   </ItemGroup>
 
 </Project>

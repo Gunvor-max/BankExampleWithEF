@@ -13,6 +13,7 @@
     bool canSetPassWord = Model.CanSetPassword;
     bool isUpdatedConfirmation = Model.IsUpdatedConfirmation;
     bool isChoosen = Model.IsChoosen;
+    bool isChoosenToCreate = Model.IsChoosenToCreate;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 }
 <html>
@@ -221,7 +222,7 @@
                                     <!-- PartielView to trigger the EmployeeUpdate modal-->
                                     <partial name="PartialViews/ModalEmployeeUpdate" />
                                 }
-                                @if(isChoosen)
+                                @if(isChoosenToCreate)
                                 {
                                     <button type="submit" asp-page-handler="CreateEmployee" class="btn btn-success">Opret Medarbejder</button>
                                 }
@@ -238,8 +239,7 @@
                             </div>
                             }
                             <!-- PartielView to trigger the EmployeeDelete modal-->
-                            @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
-
+                            <partial name="PartialViews/ModalEmployeeDelete" />
                         </form>
                     </div>
                 }

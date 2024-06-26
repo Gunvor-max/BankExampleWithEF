@@ -1,0 +1,25 @@
+﻿@{
+}
+<!-- Delete Modal -->
+<div id="myModal-@Model.EmployeeId" class="modal fade" tabindex="-1" aria-labelledby="modalLabel-@Model.EmployeeId" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100" id="modalLabel-@Model.EmployeeId">Slet Medarbejder</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                Er du sikker på at du vil slette medarbejderen:
+                <p style="font-weight:bold"> @Model.Choosen_FirstName @Model.Choosen_LastName</p>
+            </div>
+            <!--Modal buttons -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Fortryd</button>
+                <form method="post">
+                    <input type="submit" value="Bekræft" class="btn btn-danger" asp-route-id="@Model.EmployeeId" asp-page-handler="DeleteEmployee" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

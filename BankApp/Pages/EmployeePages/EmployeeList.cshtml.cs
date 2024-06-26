@@ -72,6 +72,7 @@ namespace BankApp.Pages.EmployeePages
         public bool IsUpdatedConfirmation { get; set; } = false;
         public bool CanSetPassword { get; set; } = false;
         public bool IsChoosen { get; set; } = false;
+        public bool IsChoosenToCreate { get; set; } = false;
         public void OnGet()
         {
             //Check if the user has the proper accesslevel to view the page
@@ -175,6 +176,16 @@ namespace BankApp.Pages.EmployeePages
 
         public void OnPostDeleteEmployee(int id)
         {
+            Employee employee = _employeeRepository.Read(id);
+            if (id != 0)
+            {
+                if (employee is not null)
+                {
+                    employee.IsDeleted = true;
+                    ShowEmployee = _employeeRepository.Update(employee, id);
+                    Employees = _employeeRepository.GetAll();
+                }
+            }
             IsDeletedConfirmation = true;
         }
 
@@ -208,17 +219,12 @@ namespace BankApp.Pages.EmployeePages
                 }
         }
 
-        public void OnPostActivateCreateCustomerAgent()
-        {
-            IsEditMode = true;
-            IsCustomerAgent = true;
-            CanSetPassword = true;
-        }
         public void OnPostActivateCreateEmployee()
         {
             IsEditMode = true;
             CanSetPassword = true;
             IsChoosen = true;
+            IsChoosenToCreate = true;
         }
         public void OnPostCreateEmployee()
         {
