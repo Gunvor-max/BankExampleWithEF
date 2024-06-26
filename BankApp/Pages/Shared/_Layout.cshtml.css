@@ -11,6 +11,9 @@ a.navbar-brand {
     word-break: break-all;
 }
 
+.searchbox {
+    padding: initial !important;
+}
 
 .btn-primary {
     color: #fff;

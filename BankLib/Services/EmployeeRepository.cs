@@ -83,7 +83,7 @@ namespace BankLib.Services
         .Include(e => e.Position) // Include Position entity
         .Include(e => e.Department) // Include Department entity
         .Include(e => e.MainAccount) // Include MainAccount entity;
-        .Where(e => EF.Functions.Like(e.FirstName, $"%{search}%")).ToList(); // Find employee by ID
+        .Where(e => e.IsDeleted == false && EF.Functions.Like(e.FirstName, $"%{search}%")).ToList(); // Find employee by ID
         }
     }
 }

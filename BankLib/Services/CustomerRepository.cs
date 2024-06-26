@@ -72,7 +72,9 @@ namespace BankLib.Services
 
         public Customer Update(Customer theObject, int id)
         {
-            throw new NotImplementedException();
+            _context.BankExampleWithEfCustomers.Update(theObject);
+            _context.SaveChanges();
+            return theObject;
         }
     }
 }

@@ -22,29 +22,31 @@
 </head>
 <body>
     <div class="container-fluid mt-3">
-        <h1>Medarbejdere</h1>
+        <a id="Headline" href="/EmployeePages/EmployeeList">
+            <h1>Medarbejdere</h1>
+            </a>
         @if (isDeletedConfirmation)
         {
             <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu slettet fra systemet
-                </h3>
+                <h5>
+                    Medarbejderen @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName er succesfuldt slettet fra systemet
+                </h5>
             </div>
         }
         @if (isCreatedConfirmation)
         {
             <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu oprettet i systemet
-                </h3>
+                <h5>
+                    Medarbejderen @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName er succesfuldt oprettet i systemet
+                </h5>
             </div>
         }
         @if (isUpdatedConfirmation)
         {
             <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName </span> er nu opdateret i systemet
-                </h3>
+                <h5>
+                    Medarbejderen @Model.ShowEmployee.FirstName @Model.ShowEmployee.LastName er succesfuldt opdateret i systemet
+                </h5>
             </div>
         }
         <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
@@ -234,12 +236,12 @@
                                         <button id="editanddelete" type="submit" asp-page-handler="EnableEdit" asp-route-id="@Model.EmployeeId" class="btn btn-outline-warning">Ret</button>
                                     </div>
                                     <div class="col-md-12">
-                                        <button id="editanddelete" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">Slet</button>
+                                        <button id="editanddelete" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#myModalDelete-@Model.EmployeeId" data-employee-id="@Model.EmployeeId">Slet</button>
                                     </div>
                             </div>
                             }
                             <!-- PartielView to trigger the EmployeeDelete modal-->
-                            <partial name="PartialViews/ModalEmployeeDelete" />
+                            <partial name="PartialViews/ModalEmployeeDelete"/>
                         </form>
                     </div>
                 }

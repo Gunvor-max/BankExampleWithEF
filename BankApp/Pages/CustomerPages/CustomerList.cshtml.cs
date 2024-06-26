@@ -61,6 +61,8 @@ namespace BankApp.Pages.CustomerPages
         public bool IsCreatedConfirmation { get; set; } = false;
         public bool IsUpdatedConfirmation { get; set; } = false;
         public bool CanSetPassword { get; set; } = false;
+        public bool IsChoosen { get; set; } = false;
+        public bool IsChoosenToCreate { get; set; } = false;
         public void OnGet()
         {
             //Check if the user has the proper accesslevel to view the page
@@ -112,6 +114,7 @@ namespace BankApp.Pages.CustomerPages
             }
             IsEditMode = false;
             IsDeleteable = true;
+            IsChoosen = true;
         }
 
         public void OnPostEnableEdit(int Id)
@@ -130,6 +133,7 @@ namespace BankApp.Pages.CustomerPages
 
             IsEditMode = true;
             IsEditTriggered = true;
+            IsChoosen = true;
         }
 
         public void OnPostDeleteCustomer(int id)
@@ -167,11 +171,15 @@ namespace BankApp.Pages.CustomerPages
             IsEditMode = true;
             IsCustomerAgent = true;
             CanSetPassword = true;
+            IsChoosen = true;
+            IsChoosenToCreate = true;
         }
         public void OnPostActivateCreateCustomer()
         {
             IsEditMode = true;
             CanSetPassword = true;
+            IsChoosen = true;
+            IsChoosenToCreate = true;
         }
         public void OnPostCreateCustomer()
         {

@@ -13,6 +13,10 @@ input {
     padding-bottom: 20px;
 }
 
+.searchbox {
+    padding: 1px 2px 1px 2px !important;
+}
+
 .hidden-button {
     display: none; /* Ensures the button is not visible but functional */
 }
@@ -65,5 +69,10 @@ PaymentFormBtn {
 
 #editanddelete {
     width: -webkit-fill-available;
+    color: black;
+}
+
+#Headline {
+    text-decoration:none;
     color: black;
 }

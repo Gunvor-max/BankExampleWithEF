@@ -9,6 +9,10 @@
     /* Optional: Styling for columns if needed */
 }
 
+.searchbox {
+    padding: 1px 2px 1px 2px !important;
+}
+
 input {
     padding-bottom: 20px;
 }
@@ -61,4 +65,14 @@ PaymentFormBtn {
     width: 100%;
     z-index: 999;
     background-color: white;
+}
+
+#editanddelete {
+    width: -webkit-fill-available;
+    color: black;
+}
+
+#Headline {
+    text-decoration: none;
+    color: black;
 }
