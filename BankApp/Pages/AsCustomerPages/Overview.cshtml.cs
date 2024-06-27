@@ -55,6 +55,7 @@ namespace BankApp.Pages.AsCustomerPages
         public bool IsCreatedConfirmation { get; set; } = false;
         public bool IsUpdatedConfirmation { get; set; } = false;
         public bool CanSetPassword { get; set; } = false;
+        public bool TransforSuccess { get; set; } = false;
         public void OnGet()
         {
             //Check if the user has the proper accesslevel to view the page

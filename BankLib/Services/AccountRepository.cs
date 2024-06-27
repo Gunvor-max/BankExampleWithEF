@@ -51,5 +51,19 @@ namespace BankLib.Services
         {
             throw new NotImplementedException();
         }
+
+        public void Withdraw (int id, int amount)
+        {
+            Account account = Read(id);
+            account.Balance -= amount;
+            _context.SaveChanges();
+        }
+
+        public void Deposit(int id, int amount)
+        {
+            Account account = Read(id);
+            account.Balance += amount;
+            _context.SaveChanges();
+        }
     }
 }

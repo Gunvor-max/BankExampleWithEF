@@ -10,5 +10,7 @@ namespace BankLib.Services.Interfaces
     public interface IAccountRepository : IGenericCRUDInterface<Account>
     {
         List<Account> ReadAccountsConnectedToMain(int mainAccountId);
+        public void Withdraw(int id, int amount);
+        public void Deposit(int id, int amount);
     }
 }

@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Overblik";
 
+    var transforsuccess = TempData["transforsuccess"] as bool? ?? false;
     Employee? employee = null;
     Customer? customer = null;
     object? user = null;
@@ -60,6 +61,14 @@
         else
         {
         <h1>Konti</h1>
+        }
+        @if (transforsuccess)
+        {
+            <div class="alert-success">
+                <h5>
+                    Overførslen var succesfuld
+                </h5>
+            </div>
         }
         @if (isDeletedConfirmation)
         {
