@@ -19,7 +19,7 @@ namespace BankApp.Pages.AsCustomerPages
             if (EmployeeLoggedIn is not null || CustomerLoggedIn is not null)
             {
                 var customerOrEmployee = EmployeeLoggedIn is not null ? _accountRepository.ReadAccountsConnectedToMain(EmployeeLoggedIn.MainAccountId) :
-                                                            _accountRepository.ReadAccountsConnectedToMain(CustomerLoggedIn.MainAccountId);
+                                                                        _accountRepository.ReadAccountsConnectedToMain(CustomerLoggedIn.MainAccountId);
                 Accounts = customerOrEmployee;
             }
         }
@@ -27,6 +27,8 @@ namespace BankApp.Pages.AsCustomerPages
         public List<Account> Accounts { get; set; }
         public Account? Account_ChosenFrom { get; set; }
         public Account? Account_ChosenTo { get; set; }
+        public static Account? AccountFromStored { get; set; }
+        public static Account? AccountToStored { get; set; }
         public bool IsChosenFrom { get; set; } = false;
         public bool IsChosenTo { get; set; } = false;
         public bool Transforsuccess { get; set; } = false;
@@ -58,50 +60,38 @@ namespace BankApp.Pages.AsCustomerPages
 
         public IActionResult OnPostChoosenAccountFrom(int accountidFrom, int MainidFrom)
         {
-            Account_ChosenFrom = _accountRepository.ReadAccountsConnectedToMain(MainidFrom).FirstOrDefault(a => a.AccountId == accountidFrom);
-            // Store chosen account in session
-            HttpContext.Session.SetString("ChosenAccount", JsonConvert.SerializeObject(Account_ChosenFrom));
-            IsChosenFrom = true; // Update flag after assigning the chosen account
+            //retrieve AccountFrom and store it in a static object
+            AccountFromStored = _accountRepository.ReadAccountsConnectedToMain(MainidFrom).FirstOrDefault(a => a.AccountId == accountidFrom);
+
+            //Assign stored Account in the static object and assign it to be displayed in the view
+            Account_ChosenFrom = AccountFromStored;
+
+            IsChosenFrom = true; 
             return Page();
         }
         public IActionResult OnPostChoosenAccountTo(int accountidTo, int MainidTo)
         {
-            Account_ChosenTo = _accountRepository.ReadAccountsConnectedToMain(MainidTo).FirstOrDefault(a => a.AccountId == accountidTo);
-            // Retrieve chosen account from session
-            string chosenAccountJson = HttpContext.Session.GetString("ChosenAccount");
+            //retrieve AccountFrom to display in the View
+            Account_ChosenFrom = AccountFromStored;
 
-            if (chosenAccountJson != null)
-            {
-                Account_ChosenFrom = JsonConvert.DeserializeObject<Account>(chosenAccountJson);
-            }
-            HttpContext.Session.SetString("ChosenAccount1", JsonConvert.SerializeObject(Account_ChosenTo));
+            //retrieve AccountTo and store it in a static object
+            AccountToStored = _accountRepository.ReadAccountsConnectedToMain(MainidTo).FirstOrDefault(a => a.AccountId == accountidTo);
+            //Assign stored Account in the static object and assign it to be displayed in the view
+            Account_ChosenTo = AccountToStored;
 
-            IsChosenFrom = true; // Update flag after assigning the chosen account
+            IsChosenFrom = true;
             IsChosenTo = true;
             return Page();
         }
 
         public IActionResult OnPostTransfer()
         {
-            string chosenAccountJson = HttpContext.Session.GetString("ChosenAccount");
+            //Account to withdraw money from
+            _accountRepository.Withdraw(AccountFromStored.AccountId, DepositAmount); 
+            
+            //Account to deposit money
+            _accountRepository.Deposit(AccountToStored.AccountId, DepositAmount); 
 
-            if (chosenAccountJson != null)
-            {
-                var chosenAccountFrom = JsonConvert.DeserializeObject<Account>(chosenAccountJson);
-
-                    // Update existing account
-                    _accountRepository.Withdraw(chosenAccountFrom.AccountId, DepositAmount); // Assuming WithDrawMoney updates the Amount
-            }
-
-            string chosenAccountJson1 = HttpContext.Session.GetString("ChosenAccount1");
-
-            if (chosenAccountJson1 != null)
-            {
-                var chosenAccountTo = JsonConvert.DeserializeObject<Account>(chosenAccountJson1);
-
-                // Update existing account
-                _accountRepository.Deposit(chosenAccountTo.AccountId, DepositAmount); // Assuming WithDrawMoney updates the Amount
-            }
             Transforsuccess = true;
             TempData["transforsuccess"] = Transforsuccess;
             return RedirectToPage("/AsCustomerPages/Overview");
