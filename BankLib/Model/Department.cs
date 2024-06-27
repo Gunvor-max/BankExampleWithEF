@@ -18,7 +18,7 @@ public partial class Department
         Description = description;
     }
 
-    public Department():this(0,"DefaultAfdeling","DefaultBeskrivelse")
+    public Department():this(0,"Default","Default")
     {
         
     }

@@ -11,6 +11,21 @@ namespace BankLib.Model;
 [Table("BankExampleWithEF_EmployeeLog")]
 public partial class EmployeeLog
 {
+    public EmployeeLog(int logId, int responsibleEmployeeId, DateTime date, string activity, int? affectedEmployeeId, int? affectedCustomerId)
+    {
+        LogId = logId;
+        ResponsibleEmployeeId = responsibleEmployeeId;
+        Date = date;
+        Activity = activity;
+        AffectedEmployeeId = affectedEmployeeId;
+        AffectedCustomerId = affectedCustomerId;
+    }
+
+    public EmployeeLog():this(0,0,DateTime.UtcNow,"Default",null,null)
+    {
+        
+    }
+
     [Key]
     [Column("Log_Id")]
     public int LogId { get; set; }

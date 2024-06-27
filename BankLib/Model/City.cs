@@ -19,7 +19,7 @@ public partial class City
         ZipCode = zipCode;
     }
 
-    public City():this(0,0,"DefaultBy",new ZipCodeTable())
+    public City():this(0,0,"Default",new ZipCodeTable())
     {
         
     }

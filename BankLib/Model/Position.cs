@@ -19,7 +19,7 @@ public partial class Position
         AccessLevel = accessLevel;
     }
 
-    public Position():this(0,"DefaultTitel","DefaultBeskrivelse",0)
+    public Position():this(0,"Default","Default",1)
     {
         
     }

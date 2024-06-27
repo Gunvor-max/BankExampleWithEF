@@ -32,7 +32,7 @@ public partial class Employee
         Position = position;
     }
 
-    public Employee() : this(0, 0, 0, 0, 0, "default", "default", "default@mail.dk", "00000000", "DefaultPassword", "DefaultGender", false, "DefaultImagePath", new Address(), new Department(), new MainAccount(), new Position())
+    public Employee():this(0,0,0,0,0,"Default","Default","Default@mail.dk","00000000","Default","Mand",false,"Default",new Address(),new Department(),new MainAccount(),new Position())
     {
         
     }

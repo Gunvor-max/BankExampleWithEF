@@ -17,7 +17,7 @@ public partial class ZipCodeTable
         ZipCode = zipCode;
     }
 
-    public ZipCodeTable():this(0,0000)
+    public ZipCodeTable():this(0,1000)
     {
         
     }

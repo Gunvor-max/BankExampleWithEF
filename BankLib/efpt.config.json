@@ -1,6 +1,6 @@
 ﻿{
    "CodeGenerationMode": 3,
-   "ContextClassName": "EFContext",
+   "ContextClassName": "EFContext2",
    "ContextNamespace": null,
    "FilterSchemas": false,
    "IncludeConnectionString": true,

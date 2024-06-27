@@ -21,9 +21,8 @@ public partial class Account
         Interestrate = interestrate;
     }
 
-    public Account():this(0,0,"DefaultAccount","DefaultType",0,0)
+    public Account():this(0,0,"Default","Default",0,0)
     {
-        
     }
 
     [Key]
@@ -44,6 +43,9 @@ public partial class Account
 
     [Column(TypeName = "decimal(18, 0)")]
     public decimal Interestrate { get; set; }
+
+    [InverseProperty("Account")]
+    public virtual ICollection<Transaction> BankExampleWithEfTransactions { get; set; } = new List<Transaction>();
 
     [ForeignKey("MainAccountId")]
     [InverseProperty("BankExampleWithEfAccounts")]

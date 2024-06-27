@@ -46,6 +46,7 @@
     bool isCreatedConfirmation = Model.IsCreatedConfirmation;
     bool canSetPassWord = Model.CanSetPassword;
     bool isUpdatedConfirmation = Model.IsUpdatedConfirmation;
+    bool seeTransactions = Model.SeeTransactions;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 }
 <html>
@@ -96,7 +97,7 @@
         }
         <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
             <div class="row custom-row">
-                <div class="col-md-6 custom-col">
+                <div class="col custom-col">
 
                     <form method="post">
                         <input class="form-control mb-3" type="text" asp-for="@Model.Search" placeholder="Søg efter konti..." />
@@ -116,7 +117,7 @@
                             @foreach (Account a in Model.Accounts)
                             {
                                 <tr class="clickable-row" id="customerRow">
-                                    <form method="post" asp-page-handler="SelectAccount" asp-route-accountId="@a.AccountId" id="@a.AccountId">
+                                    <form method="post" asp-page-handler="SeeTransactionsForAccount" asp-route-accountId="@a.AccountId" id="@a.AccountId">
                                     <td>
                                             @a.AccountId
                                     </td>
@@ -142,7 +143,53 @@
                         });
                     </script>
                 </div>
-                <div class="col-md-6 custom-col">
+                @if (seeTransactions)
+                {
+                    <div class="col-md-6 custom-col">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Dato</th>
+                                    <th>Beløb</th>
+                                    <th>Beskrivelse</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Transaction t in Model.Transactions)
+                                {
+                                    <tr class="clickable-row" id="customerRow">
+                                        <form method="post" asp-page-handler="" asp-route-accountId="@t.AccountId" id="@t.AccountId">
+                                        <td>
+                                                @t.Date
+                                        </td>
+                                        <td>
+                                            @if(t.Type.ToLower() == "fra")
+                                            {
+                                                    <p style="color:red">@t.Amount</p>
+                                                }
+                                                else if(t.Type.ToLower() == "til")
+                                                {
+                                                <p style="color:green">@t.Amount</p>
+                                                }
+                                            </td>
+                                        <td>
+                                                @t.Description
+                                        </td>
+                                        </form>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <script>
+                            $(".clickable-row").click(function () {
+                                var clickedRow = $(this); // Get the clicked row element
+                                var formToSubmit = clickedRow.find("form"); // Find the form within the row
+                                formToSubmit.submit(); // Submit the found form
+                            });
+                        </script>
+                        </div>
+                }
+                @* <div class="col-md-6 custom-col">
                     <form method="post">
                         <h4>Konto oplysninger:</h4>
                         <div class="row">
@@ -180,7 +227,7 @@
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.CustomerID" data-employee-id="@Model.CustomerID">Gem ændringer</button>
                                 <!-- PartielView to trigger the EmployeeUpdate modal-->
                                 @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
-                            }
+                       @*      }
                         }
                         else if (isDeleteAble)
                         {
@@ -194,12 +241,12 @@
                         else
                         {
                             <button type="submit" asp-page-handler="CreateCustomer" class="btn btn-success">Opret Kunde</button>
-                        }
+                        } *@
                         <!-- PartielView to trigger the EmployeeDelete modal-->
                         @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
-
+@* 
                     </form>
-                </div>
+                </div> *@ 
             </div>
         </div>
     </div>

@@ -20,7 +20,7 @@ public partial class Address
         City = city;
     }
 
-    public Address():this(0,0,"DefaultVej",1,new City())
+    public Address():this(0,0,"Default",1,new City())
     {
         
     }

@@ -11,6 +11,23 @@ namespace BankLib.Model;
 [Table("BankExampleWithEF_Transaction")]
 public partial class Transaction
 {
+    public Transaction(int transactionId, int? employeeId, int? customerId, int accountId, int amount, DateTime date, string type, string description)
+    {
+        TransactionId = transactionId;
+        EmployeeId = employeeId;
+        CustomerId = customerId;
+        AccountId = accountId;
+        Amount = amount;
+        Date = date;
+        Type = type;
+        Description = description;
+    }
+
+    public Transaction():this(0,null,null,0,0,DateTime.UtcNow,"Default","Default")
+    {
+        
+    }
+
     [Key]
     [Column("Transaction_Id")]
     public int TransactionId { get; set; }
@@ -20,6 +37,9 @@ public partial class Transaction
 
     [Column("Customer_Id")]
     public int? CustomerId { get; set; }
+
+    [Column("Account_Id")]
+    public int AccountId { get; set; }
 
     public int Amount { get; set; }
 
@@ -33,6 +53,10 @@ public partial class Transaction
     [Required]
     [StringLength(30)]
     public string Description { get; set; }
+
+    [ForeignKey("AccountId")]
+    [InverseProperty("BankExampleWithEfTransactions")]
+    public virtual Account Account { get; set; }
 
     [ForeignKey("CustomerId")]
     [InverseProperty("BankExampleWithEfTransactions")]

@@ -43,6 +43,7 @@
     Account? accountChosenTo = Model.Account_ChosenTo;
     List<Account> accounts = Model.Accounts;
     int depositAmount = Model.DepositAmount;
+    string description = Model.Customer_Description;
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 }
@@ -222,6 +223,8 @@
                                         <div class="form-group>">
                                             <label>Indsæt beløb</label><br />
                                             <input class="form-control" type="number" min-value="0" asp-for="@depositAmount"><br />
+                                            <label>Beskrivelse</label><br />
+                                            <input class="form-control" type="text" asp-for="@Model.Customer_Description"><br />
                                             <tc>
                                                 <button asp-page-handler="Transfer" class="btn btn-success">Bekræft</button>
                                             </tc>

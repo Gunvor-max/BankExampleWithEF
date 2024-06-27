@@ -9,11 +9,13 @@ namespace BankApp.Pages.AsCustomerPages
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IAccountRepository _accountRepository;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public OverviewModel(ICustomerRepository customerRepository, IAccountRepository accountRepository)
+        public OverviewModel(ICustomerRepository customerRepository, IAccountRepository accountRepository, ITransactionRepository transactionRepository)
         {
             _customerRepository = customerRepository;
             _accountRepository = accountRepository;
+            _transactionRepository = transactionRepository;
             //Get acounts connected to either employee or customer
             if (employeeLoggedIn is not null || customerLoggedIn is not null)
             {
@@ -21,8 +23,10 @@ namespace BankApp.Pages.AsCustomerPages
                                                             _accountRepository.ReadAccountsConnectedToMain(customerLoggedIn.MainAccountId);
                 Accounts = customerOrEmployee;
             }
+            _transactionRepository = transactionRepository;
         }
         public List<Account> Accounts { get; set; }
+        public List<Transaction> Transactions { get; set; }
         public static Employee? employeeLoggedIn { get; set; }
         public static Customer? customerLoggedIn { get; set; }
 
@@ -56,6 +60,7 @@ namespace BankApp.Pages.AsCustomerPages
         public bool IsUpdatedConfirmation { get; set; } = false;
         public bool CanSetPassword { get; set; } = false;
         public bool TransforSuccess { get; set; } = false;
+        public bool SeeTransactions {  get; set; } = false;
         public void OnGet()
         {
             //Check if the user has the proper accesslevel to view the page
@@ -195,6 +200,12 @@ namespace BankApp.Pages.AsCustomerPages
             //ShowCustomer = _customerRepository.Create(newcustomer);
             //Customers = _customerRepository.GetAll();
             //IsCreatedConfirmation = true;
+        }
+
+        public void OnPostSeeTransactionsForAccount(int accountId) 
+        {
+            Transactions = _transactionRepository.ReadAccountTransactions(accountId);
+            SeeTransactions = true;
         }
     }
 }

@@ -27,8 +27,9 @@ public partial class Customer
         MainAccount = mainAccount;
     }
 
-    public Customer():this(0,0,0,"DefaultCustomer","DefaultCustomerLastName","DefaultCustomerMail@dk","DefaultPhonenumber","DefaultPassword","DefaultGender",false,new Address(),new MainAccount())
-    { 
+    public Customer():this(0,0,0,"Default","Default","Default@mail.dk","00000000","Default","Mand",false,new Address(),new MainAccount())
+    {
+        
     }
 
     [Key]

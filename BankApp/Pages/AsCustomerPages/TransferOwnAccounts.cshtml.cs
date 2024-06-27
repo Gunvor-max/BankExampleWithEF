@@ -11,10 +11,12 @@ namespace BankApp.Pages.AsCustomerPages
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IAccountRepository _accountRepository;
-        public TransferOwnAccountsModel(ICustomerRepository customerRepository, IAccountRepository accountRepository)
+        private readonly ITransactionRepository _transactionRepository;
+        public TransferOwnAccountsModel(ICustomerRepository customerRepository, IAccountRepository accountRepository, ITransactionRepository transactionRepository)
         {
             _customerRepository = customerRepository;
             _accountRepository = accountRepository;
+            _transactionRepository = transactionRepository;
             //Get acounts connected to either employee or customer
             if (EmployeeLoggedIn is not null || CustomerLoggedIn is not null)
             {
@@ -22,6 +24,7 @@ namespace BankApp.Pages.AsCustomerPages
                                                                         _accountRepository.ReadAccountsConnectedToMain(CustomerLoggedIn.MainAccountId);
                 Accounts = customerOrEmployee;
             }
+            _transactionRepository = transactionRepository;
         }
 
         public List<Account> Accounts { get; set; }
@@ -36,6 +39,8 @@ namespace BankApp.Pages.AsCustomerPages
         public static Employee? EmployeeLoggedIn { get; set; }
         [BindProperty]
         public int DepositAmount {  get; set; }
+        [BindProperty]
+        public string Customer_Description { get; set; }
 
         public void OnGet()
         {
@@ -90,7 +95,55 @@ namespace BankApp.Pages.AsCustomerPages
             _accountRepository.Withdraw(AccountFromStored.AccountId, DepositAmount); 
             
             //Account to deposit money
-            _accountRepository.Deposit(AccountToStored.AccountId, DepositAmount); 
+            _accountRepository.Deposit(AccountToStored.AccountId, DepositAmount);
+
+            //
+            if (CustomerLoggedIn is not null)
+            {
+                Transaction transactionFromAccount = new Transaction
+                {
+                    CustomerId = CustomerLoggedIn.CustomerId,
+                    AccountId = AccountFromStored.AccountId,
+                    Amount = DepositAmount,
+                    Date = DateTime.UtcNow,
+                    Type = "Fra",
+                    Description = Customer_Description,
+                };
+                _transactionRepository.Create(transactionFromAccount);
+                Transaction transactionToAccount = new Transaction
+                {
+                    CustomerId = CustomerLoggedIn.CustomerId,
+                    AccountId = AccountToStored.AccountId,
+                    Amount = DepositAmount,
+                    Date = DateTime.UtcNow,
+                    Type = "Til",
+                    Description = Customer_Description,
+                };
+                _transactionRepository.Create(transactionToAccount);
+            }
+            else if (EmployeeLoggedIn is not null)
+            {
+                Transaction transactionFromAccount = new Transaction
+                {
+                    EmployeeId = EmployeeLoggedIn.EmployeeId,
+                    AccountId = AccountFromStored.AccountId,
+                    Amount = DepositAmount,
+                    Date = DateTime.UtcNow,
+                    Type = "Overførsel",
+                    Description = Customer_Description,
+                };
+                _transactionRepository.Create(transactionFromAccount);
+                Transaction transactionToAccount = new Transaction
+                {
+                    EmployeeId = EmployeeLoggedIn.EmployeeId,
+                    AccountId = AccountToStored.AccountId,
+                    Amount = DepositAmount,
+                    Date = DateTime.UtcNow,
+                    Type = "Overførsel",
+                    Description = Customer_Description,
+                };
+                _transactionRepository.Create(transactionToAccount);
+            }
 
             Transforsuccess = true;
             TempData["transforsuccess"] = Transforsuccess;

@@ -136,11 +136,15 @@ public partial class EFContext : DbContext
 
         modelBuilder.Entity<Transaction>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__BankExam__9A8D560544BDF85E");
+            entity.HasKey(e => e.TransactionId).HasName("PK__tmp_ms_x__9A8D5605345FB523");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.BankExampleWithEfTransactions).HasConstraintName("FK__BankExamp__Custo__160F4887");
+            entity.HasOne(d => d.Account).WithMany(p => p.BankExampleWithEfTransactions)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__BankExamp__Accou__1F98B2C1");
 
-            entity.HasOne(d => d.Employee).WithMany(p => p.BankExampleWithEfTransactions).HasConstraintName("FK__BankExamp__Emplo__151B244E");
+            entity.HasOne(d => d.Customer).WithMany(p => p.BankExampleWithEfTransactions).HasConstraintName("FK__BankExamp__Custo__1EA48E88");
+
+            entity.HasOne(d => d.Employee).WithMany(p => p.BankExampleWithEfTransactions).HasConstraintName("FK__BankExamp__Emplo__1DB06A4F");
         });
 
         modelBuilder.Entity<ZipCodeTable>(entity =>
