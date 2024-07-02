@@ -58,13 +58,13 @@
 </head>
 <body>
     <div class="container-fluid mt-3">
-        @if(employee is not null)
+        @if (employee is not null)
         {
             <h1>@employee.FirstName Konti</h1>
         }
         else
         {
-        <h1>Konti</h1>
+            <h1>Konti</h1>
         }
         @if (transforsuccess)
         {
@@ -131,7 +131,7 @@
                                             @a.Type
                                     </td>
                                     <td>
-                                        @a.Balance
+                                            @a.Balance
                                     </td>
                                     </form>
                                 </tr>
@@ -170,15 +170,15 @@
                                                 @t.Description
                                         </td>
                                         <td>
-                                            @if(t.Type.ToLower() == "fra")
-                                            {
-                                                    <p style="color:red; font:bolder">- @t.Amount</p>
+                                                @if (t.Type.ToLower() == "fra")
+                                                {
+                                                <p style="color:red; font:bolder">- @t.Amount</p>
                                                 }
-                                                else if(t.Type.ToLower() == "til")
+                                                else if (t.Type.ToLower() == "til")
                                                 {
                                                 <p style="color:green; font:bolder">+ @t.Amount</p>
                                                 }
-                                            </td>
+                                        </td>
                                         <td>
                                                 @t.Current_Balance
                                         </td>
@@ -196,14 +196,13 @@
                         </script>
                     </div>
                 }
-                else if(!seeTransactions && seeGraph)
+                else if (!seeTransactions && seeGraph)
                 {
                     <div class="col-md-6 custom-col">
                         <canvas id="transactionchart">
-
                         </canvas>
                         <script>
-                            var transactionDates = @Html.Raw(Json.Serialize(Model.TransactionDates));
+                            var transactionDates = @Html.Raw(Json.Serialize(Model.FormattedDates));
                             var transactionBalance = @Html.Raw(Json.Serialize(Model.TransactionBalance));
 
                             var chartData = {
@@ -211,10 +210,9 @@
                                 datasets: [{
                                     label: 'Account Amount',
                                     data: transactionBalance,
-                                    borderColor: 'black'
+                                    borderColor: 'black',
                                 }]
                             };
-
                             var ctx = document.getElementById('transactionchart').getContext('2d');
                             var myChart = new Chart(ctx, {
                                 type: 'line',
@@ -222,66 +220,73 @@
                                 // Additional options for customization
                             });
                         </script>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form method="post">
+                                    <button style="width:-webkit-fill-available" class="btn btn-primary" type="submit" asp-page-handler="SeeTransactionsForAccount" asp-route-accountId="@Model.Transactions.FirstOrDefault(i => i.AccountId == i.AccountId).AccountId">Tilbage</button>
+                                </form>
+                            </div>
                         </div>
+                    </div>
                 }
                 @* <div class="col-md-6 custom-col">
-                    <form method="post">
-                        <h4>Konto oplysninger:</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.AccountID" asp-for="AccountID" required readonly />
-                                    <label asp-for="AccountID" for="floatingInput">Konto Id</label>
-                                </div>
-                                <div class="form-floating mt-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mt-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
-                                </div>
-                            </div>
-                        </div>
-                        @if (isEditMode)
-                        {
-                            @if (isEditTriggered)
-                            {
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.CustomerID" data-employee-id="@Model.CustomerID">Gem ændringer</button>
-                                <!-- PartielView to trigger the EmployeeUpdate modal-->
-                                @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
-                       @*      }
-                        }
-                        else if (isDeleteAble)
-                        {
-                            <button type="submit" asp-page-handler="EnableEdit" asp-route-accountId="@Model.AccountID" class="btn btn-outline-warning">Ret</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.CustomerID" data-employee-id="@Model.CustomerID">X</button>
-                        }
-                        @if (!isEditMode)
-                        {
-                            <button type="submit" asp-page-handler="ActivateCreateCustomer" class="btn btn-success">Opret Kunde</button>
-                        }
-                        else
-                        {
-                            <button type="submit" asp-page-handler="CreateCustomer" class="btn btn-success">Opret Kunde</button>
-                        } *@
-                        <!-- PartielView to trigger the EmployeeDelete modal-->
-                        @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
-@* 
-                    </form>
-                </div> *@ 
+                <form method="post">
+                <h4>Konto oplysninger:</h4>
+                <div class="row">
+                <div class="col-md-6">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
+                </div>
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" value="@Model.AccountID" asp-for="AccountID" required readonly />
+                <label asp-for="AccountID" for="floatingInput">Konto Id</label>
+                </div>
+                <div class="form-floating mt-3">
+                <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
+                <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="form-floating mt-3">
+                <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
+                <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
+                </div>
+                </div>
+                </div>
+                @if (isEditMode)
+                {
+                @if (isEditTriggered)
+                {
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.CustomerID" data-employee-id="@Model.CustomerID">Gem ændringer</button>
+                <!-- PartielView to trigger the EmployeeUpdate modal-->
+                @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
+                @*      }
+                }
+                else if (isDeleteAble)
+                {
+                <button type="submit" asp-page-handler="EnableEdit" asp-route-accountId="@Model.AccountID" class="btn btn-outline-warning">Ret</button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.CustomerID" data-employee-id="@Model.CustomerID">X</button>
+                }
+                @if (!isEditMode)
+                {
+                <button type="submit" asp-page-handler="ActivateCreateCustomer" class="btn btn-success">Opret Kunde</button>
+                }
+                else
+                {
+                <button type="submit" asp-page-handler="CreateCustomer" class="btn btn-success">Opret Kunde</button>
+                } *@
+                <!-- PartielView to trigger the EmployeeDelete modal-->
+                @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
+                @*
+                </form>
+                </div> *@
             </div>
         </div>
     </div>

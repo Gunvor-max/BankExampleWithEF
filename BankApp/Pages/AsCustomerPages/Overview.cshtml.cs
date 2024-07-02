@@ -222,8 +222,8 @@ namespace BankApp.Pages.AsCustomerPages
                 TransactionDates.Add(transaction.Date);
                 TransactionBalance.Add(transaction.Current_Balance);
                 
-                FormattedDates = TransactionDates.Select(date => date.ToString("yyyy-MM-dd : HH-mm")).ToList();
             }
+            FormattedDates = TransactionDates.Select(date => date.ToString("dd/MM - HH:mm")).ToList();
             SeeTransactions = false;
             SeeGraph = true;
         }

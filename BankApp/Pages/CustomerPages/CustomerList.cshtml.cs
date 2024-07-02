@@ -1,4 +1,5 @@
 using BankLib.Model;
+using BankLib.Services;
 using BankLib.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,10 +10,12 @@ namespace BankApp.Pages.CustomerPages
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IAccountRepository _accountRepository;
-        public CustomerListModel(ICustomerRepository customerRepository, IAccountRepository accountRepository)
+        private readonly ITransactionRepository _transactionRepository;
+        public CustomerListModel(ICustomerRepository customerRepository, IAccountRepository accountRepository, ITransactionRepository transactionRepository)
         {
             _customerRepository = customerRepository;
             _accountRepository = accountRepository;
+            _transactionRepository = transactionRepository;
             Customers = _customerRepository.GetAll();
         }
         public List<Customer> Customers { get; set; }
@@ -198,7 +201,7 @@ namespace BankApp.Pages.CustomerPages
             IsCreatedConfirmation = true;
         }
 
-        public void OnPostCreateAccount(int id) 
+        public void OnPostCreateAccount(int id)
         {
             var customer = _customerRepository.Read(id);
             Account newaccount = new Account
@@ -209,6 +212,18 @@ namespace BankApp.Pages.CustomerPages
             };
 
             _accountRepository.Create(newaccount);
+
+            Transaction starttransaction = new Transaction
+            {
+                CustomerId = customer.CustomerId,
+                AccountId = newaccount.AccountId,
+                Amount = 0,
+                Date = DateTime.UtcNow,
+                Type = "Oprettet",
+                Description = "Konto oprettet",
+                Current_Balance = newaccount.Balance
+            };
+            _transactionRepository.Create(starttransaction);
         }
     }
 }
