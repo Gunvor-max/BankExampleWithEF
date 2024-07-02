@@ -11,7 +11,7 @@ namespace BankLib.Model;
 [Table("BankExampleWithEF_Transaction")]
 public partial class Transaction
 {
-    public Transaction(int transactionId, int? employeeId, int? customerId, int accountId, int amount, DateTime date, string type, string description)
+    public Transaction(int transactionId, int? employeeId, int? customerId, int accountId, int amount, DateTime date, string type, string description, int current_Balance)
     {
         TransactionId = transactionId;
         EmployeeId = employeeId;
@@ -21,9 +21,10 @@ public partial class Transaction
         Date = date;
         Type = type;
         Description = description;
+        Current_Balance = current_Balance;
     }
 
-    public Transaction():this(0,null,null,0,0,DateTime.UtcNow,"Default","Default")
+    public Transaction():this(0,null,null,0,0,DateTime.UtcNow,"Default","Default",0)
     {
         
     }
@@ -53,6 +54,9 @@ public partial class Transaction
     [Required]
     [StringLength(30)]
     public string Description { get; set; }
+
+    [Column("Current_Balance")]
+    public int Current_Balance { get; set; }
 
     [ForeignKey("AccountId")]
     [InverseProperty("BankExampleWithEfTransactions")]

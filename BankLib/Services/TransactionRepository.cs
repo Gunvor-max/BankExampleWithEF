@@ -42,6 +42,8 @@ namespace BankLib.Services
         public List<Transaction> ReadAccountTransactions(int id)
         {
             return _context.BankExampleWithEfTransactions
+                .Include(a => a.Account)
+                .Include(c => c.Customer)
                 .Where(i => i.AccountId == id)
                 .ToList();
         }

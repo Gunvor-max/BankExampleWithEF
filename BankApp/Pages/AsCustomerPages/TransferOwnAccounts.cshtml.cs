@@ -108,6 +108,7 @@ namespace BankApp.Pages.AsCustomerPages
                     Date = DateTime.UtcNow,
                     Type = "Fra",
                     Description = Customer_Description,
+                    Current_Balance = AccountFromStored.Balance
                 };
                 _transactionRepository.Create(transactionFromAccount);
                 Transaction transactionToAccount = new Transaction
@@ -118,6 +119,7 @@ namespace BankApp.Pages.AsCustomerPages
                     Date = DateTime.UtcNow,
                     Type = "Til",
                     Description = Customer_Description,
+                    Current_Balance = AccountToStored.Balance
                 };
                 _transactionRepository.Create(transactionToAccount);
             }
@@ -131,6 +133,7 @@ namespace BankApp.Pages.AsCustomerPages
                     Date = DateTime.UtcNow,
                     Type = "Overførsel",
                     Description = Customer_Description,
+                    Current_Balance = AccountFromStored.Balance
                 };
                 _transactionRepository.Create(transactionFromAccount);
                 Transaction transactionToAccount = new Transaction
@@ -141,6 +144,7 @@ namespace BankApp.Pages.AsCustomerPages
                     Date = DateTime.UtcNow,
                     Type = "Overførsel",
                     Description = Customer_Description,
+                    Current_Balance = AccountToStored.Balance
                 };
                 _transactionRepository.Create(transactionToAccount);
             }

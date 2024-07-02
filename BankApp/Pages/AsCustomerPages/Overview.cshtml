@@ -47,10 +47,13 @@
     bool canSetPassWord = Model.CanSetPassword;
     bool isUpdatedConfirmation = Model.IsUpdatedConfirmation;
     bool seeTransactions = Model.SeeTransactions;
+    bool seeGraph = Model.SeeGraph;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 }
 <html>
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="~/lib/Chart.js/dist/Chart.min.css" />
     <link rel="stylesheet" href="~/css/CustomerStyle.css" asp-append-version="true" />
 </head>
 <body>
@@ -150,30 +153,34 @@
                             <thead>
                                 <tr>
                                     <th>Dato</th>
-                                    <th>Beløb</th>
                                     <th>Beskrivelse</th>
+                                    <th>Beløb</th>
+                                    <th>Saldo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (Transaction t in Model.Transactions)
                                 {
                                     <tr class="clickable-row" id="customerRow">
-                                        <form method="post" asp-page-handler="" asp-route-accountId="@t.AccountId" id="@t.AccountId">
+                                        <form method="post" asp-page-handler="TransactionsGraph" asp-route-accountId="@t.AccountId" id="@t.AccountId">
                                         <td>
                                                 @t.Date
                                         </td>
                                         <td>
+                                                @t.Description
+                                        </td>
+                                        <td>
                                             @if(t.Type.ToLower() == "fra")
                                             {
-                                                    <p style="color:red">@t.Amount</p>
+                                                    <p style="color:red; font:bolder">- @t.Amount</p>
                                                 }
                                                 else if(t.Type.ToLower() == "til")
                                                 {
-                                                <p style="color:green">@t.Amount</p>
+                                                <p style="color:green; font:bolder">+ @t.Amount</p>
                                                 }
                                             </td>
                                         <td>
-                                                @t.Description
+                                                @t.Current_Balance
                                         </td>
                                         </form>
                                     </tr>
@@ -185,6 +192,34 @@
                                 var clickedRow = $(this); // Get the clicked row element
                                 var formToSubmit = clickedRow.find("form"); // Find the form within the row
                                 formToSubmit.submit(); // Submit the found form
+                            });
+                        </script>
+                    </div>
+                }
+                else if(!seeTransactions && seeGraph)
+                {
+                    <div class="col-md-6 custom-col">
+                        <canvas id="transactionchart">
+
+                        </canvas>
+                        <script>
+                            var transactionDates = @Html.Raw(Json.Serialize(Model.TransactionDates));
+                            var transactionBalance = @Html.Raw(Json.Serialize(Model.TransactionBalance));
+
+                            var chartData = {
+                                labels: transactionDates,
+                                datasets: [{
+                                    label: 'Account Amount',
+                                    data: transactionBalance,
+                                    borderColor: 'black'
+                                }]
+                            };
+
+                            var ctx = document.getElementById('transactionchart').getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: chartData,
+                                // Additional options for customization
                             });
                         </script>
                         </div>

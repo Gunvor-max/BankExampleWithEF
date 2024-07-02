@@ -61,6 +61,10 @@ namespace BankApp.Pages.AsCustomerPages
         public bool CanSetPassword { get; set; } = false;
         public bool TransforSuccess { get; set; } = false;
         public bool SeeTransactions {  get; set; } = false;
+        public bool SeeGraph { get; set; } = false;
+        public List<DateTime> TransactionDates { get; set; }
+        public List<int> TransactionBalance {  get; set; }
+        public List<string> FormattedDates { get; set; }
         public void OnGet()
         {
             //Check if the user has the proper accesslevel to view the page
@@ -206,6 +210,22 @@ namespace BankApp.Pages.AsCustomerPages
         {
             Transactions = _transactionRepository.ReadAccountTransactions(accountId);
             SeeTransactions = true;
+        }
+
+        public void OnPostTransactionsGraph(int accountId)
+        {
+            Transactions = _transactionRepository.ReadAccountTransactions(accountId);
+            TransactionDates = [];
+            TransactionBalance = [];
+            foreach (Transaction transaction in Transactions) 
+            {
+                TransactionDates.Add(transaction.Date);
+                TransactionBalance.Add(transaction.Current_Balance);
+                
+                FormattedDates = TransactionDates.Select(date => date.ToString("yyyy-MM-dd : HH-mm")).ToList();
+            }
+            SeeTransactions = false;
+            SeeGraph = true;
         }
     }
 }
