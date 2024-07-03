@@ -65,5 +65,18 @@ namespace BankLib.Services
             account.Balance += amount;
             _context.SaveChanges();
         }
+
+        public List<Account> Search(string search, int mainAccountID)
+        {
+            if (search is not null)
+            {
+                return ReadAccountsConnectedToMain(mainAccountID)
+            .Where(e => e.Name.ToLower().Contains(search.ToLower())).ToList(); // Find account from name
+            }
+            else 
+            {
+                return ReadAccountsConnectedToMain(mainAccountID).ToList();
+            }
+        }
     }
 }

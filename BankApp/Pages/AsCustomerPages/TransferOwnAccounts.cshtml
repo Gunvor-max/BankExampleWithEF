@@ -222,9 +222,9 @@
                                     <table>
                                         <div class="form-group>">
                                             <label>Indsæt beløb</label><br />
-                                            <input class="form-control" type="number" min-value="0" asp-for="@depositAmount"><br />
+                                            <input class="form-control" type="number" min-value="0" required asp-for="@depositAmount"><br />
                                             <label>Beskrivelse</label><br />
-                                            <input class="form-control" type="text" asp-for="@Model.Customer_Description"><br />
+                                            <input class="form-control" type="text" min-length="1" required asp-for="@Model.Customer_Description"><br />
                                             <tc>
                                                 <button asp-page-handler="Transfer" class="btn btn-success">Bekræft</button>
                                             </tc>

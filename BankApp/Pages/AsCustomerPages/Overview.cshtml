@@ -4,7 +4,6 @@
 @{
     ViewData["Title"] = "Overblik";
 
-    var transforsuccess = TempData["transforsuccess"] as bool? ?? false;
     Employee? employee = null;
     Customer? customer = null;
     object? user = null;
@@ -37,15 +36,7 @@
     {
         ViewData["SidebarVisibleCustomer"] = true;
     }
-
-    bool isEditMode = Model.IsEditMode;
-    bool isDeleteAble = Model.IsDeleteable;
-    bool isDeletedConfirmation = Model.IsDeletedConfirmation;
-    bool isCustomerAgent = Model.IsCustomerAgent;
-    bool isEditTriggered = Model.IsEditTriggered;
-    bool isCreatedConfirmation = Model.IsCreatedConfirmation;
-    bool canSetPassWord = Model.CanSetPassword;
-    bool isUpdatedConfirmation = Model.IsUpdatedConfirmation;
+    var transforsuccess = TempData["transforsuccess"] as bool? ?? false;
     bool seeTransactions = Model.SeeTransactions;
     bool seeGraph = Model.SeeGraph;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -72,30 +63,6 @@
                 <h5>
                     Overførslen var succesfuld
                 </h5>
-            </div>
-        }
-        @if (isDeletedConfirmation)
-        {
-            <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu slettet fra systemet
-                </h3>
-            </div>
-        }
-        @if (isCreatedConfirmation)
-        {
-            <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu oprettet i systemet
-                </h3>
-            </div>
-        }
-        @if (isUpdatedConfirmation)
-        {
-            <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu opdateret i systemet
-                </h3>
             </div>
         }
         <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
@@ -229,64 +196,6 @@
                         </div>
                     </div>
                 }
-                @* <div class="col-md-6 custom-col">
-                <form method="post">
-                <h4>Konto oplysninger:</h4>
-                <div class="row">
-                <div class="col-md-6">
-                <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" required readonly="@(isEditMode ? false : true)" />
-                <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
-                </div>
-                <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" required readonly="@(isEditMode ? false : true)" />
-                <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
-                </div>
-                </div>
-                <div class="col-md-6">
-                <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" value="@Model.AccountID" asp-for="AccountID" required readonly />
-                <label asp-for="AccountID" for="floatingInput">Konto Id</label>
-                </div>
-                <div class="form-floating mt-3">
-                <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
-                </div>
-                </div>
-                <div class="col-md-6">
-                <div class="form-floating mt-3">
-                <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
-                </div>
-                </div>
-                </div>
-                @if (isEditMode)
-                {
-                @if (isEditTriggered)
-                {
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.CustomerID" data-employee-id="@Model.CustomerID">Gem ændringer</button>
-                <!-- PartielView to trigger the EmployeeUpdate modal-->
-                @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
-                @*      }
-                }
-                else if (isDeleteAble)
-                {
-                <button type="submit" asp-page-handler="EnableEdit" asp-route-accountId="@Model.AccountID" class="btn btn-outline-warning">Ret</button>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.CustomerID" data-employee-id="@Model.CustomerID">X</button>
-                }
-                @if (!isEditMode)
-                {
-                <button type="submit" asp-page-handler="ActivateCreateCustomer" class="btn btn-success">Opret Kunde</button>
-                }
-                else
-                {
-                <button type="submit" asp-page-handler="CreateCustomer" class="btn btn-success">Opret Kunde</button>
-                } *@
-                <!-- PartielView to trigger the EmployeeDelete modal-->
-                @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
-                @*
-                </form>
-                </div> *@
             </div>
         </div>
     </div>
