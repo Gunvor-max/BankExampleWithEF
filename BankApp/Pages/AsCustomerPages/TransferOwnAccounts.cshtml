@@ -49,7 +49,7 @@
 }
 <html>
 <head>
-    <link rel="stylesheet" href="~/css/TransferAccountsStyle.css" asp-append-version="true" /> 
+    <link rel="stylesheet" href="~/css/TransferAccountsStyle.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container-fluid mt-3">
@@ -63,7 +63,7 @@
                         <div id="cardtransfer" class="card shadow w-25">
                             <h2 class="card-title text-center mt-2">Overførsel</h2>
                             <div class="card-body">
-                                <div class="col">
+                                <div class="col form-floating mb-3">
                                     <h3>Fra</h3>
                                     <form method="post">
                                         <i class="col padding-right">
@@ -102,7 +102,7 @@
                                                         <form method="post">
                                                             @if (customer is not null)
                                                             {
-                                                                <button type="submit" class="dropdown-item btn btn-outline-primary" asp-route-accountidFrom="@accountFrom.AccountId" asp-route-MainidFrom="@accountFrom.MainAccountId" asp-page-handler="ChoosenAccountFrom">
+                                                                <button id="accountdropdownbtn" type="submit" class="dropdown-item btn btn-outline-primary" asp-route-accountidFrom="@accountFrom.AccountId" asp-route-MainidFrom="@accountFrom.MainAccountId" asp-page-handler="ChoosenAccountFrom">
                                                                     <table>
                                                                         <tbody>
                                                                             <tr>
@@ -119,7 +119,7 @@
                                                             }
                                                             else if (employee is not null)
                                                             {
-                                                                <button type="submit" class="dropdown-item btn btn-outline-primary" asp-route-accountidFrom="@accountFrom.AccountId" asp-route-MainidFrom="@accountFrom.MainAccountId" asp-page-handler="ChoosenAccountFrom">
+                                                                <button id="accountdropdownbtn" type="submit" class="dropdown-item btn btn-outline-primary" asp-route-accountidFrom="@accountFrom.AccountId" asp-route-MainidFrom="@accountFrom.MainAccountId" asp-page-handler="ChoosenAccountFrom">
                                                                     <table>
                                                                         <tbody>
                                                                             <tr>
@@ -141,12 +141,12 @@
                                         </i>
                                     </form>
                                 </div>
-                                <div class="col">
+                                <div class="col form-floating mb-3">
                                     <h3>Til</h3>
                                     <form method="post">
                                         <i class="col padding-right">
                                             <div class="dropdown">
-                                                <button id="accountdropdownbtn" class="btn btn-primary" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="tilDropdownButton">
+                                                <button id="accountdropdownbtn" class="btn btn-primary" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     @if (!ischosenTo)
                                                     {
                                                         <table>
@@ -179,6 +179,25 @@
                                                         <form method="post">
                                                             @if (customer is not null)
                                                             {
+                                                                @if(accountChosenFrom == accountTo)
+                                                                {
+                                                                    <button id="accountdropdownbtn" type="submit" class="dropdown-item btn btn-outline-primary" asp-route-accountidTo="@accountTo.AccountId" asp-route-MainidTo="@accountTo.MainAccountId" asp-page-handler="ChoosenAccountTo" disabled>
+                                                                        <table>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font:bolder">
+                                                                                        @accountTo.Name
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @accountTo.Balance kr.
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </button>
+                                                                }
+                                                                else
+                                                                {
                                                                 <button id="accountdropdownbtn" type="submit" class="dropdown-item btn btn-outline-primary" asp-route-accountidTo="@accountTo.AccountId" asp-route-MainidTo="@accountTo.MainAccountId" asp-page-handler="ChoosenAccountTo">
                                                                     <table>
                                                                         <tbody>
@@ -192,7 +211,8 @@
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                </button>
+                                                                </button>   
+                                                                }
                                                             }
                                                             else if (employee is not null)
                                                             {
@@ -219,20 +239,24 @@
                                     </form>
                                 </div>
                                 <form method="post">
-                                    <table>
-                                        <div class="form-group>">
-                                            <label>Indsæt beløb</label><br />
-                                            <input class="form-control" type="number" min="0" required asp-for="@depositAmount"><br />
-                                            <label>Beskrivelse</label><br />
-                                            <input class="form-control" type="text" min-length="1" required asp-for="@Model.Customer_Description"><br />
-                                            <tc>
-                                                <button asp-page-handler="Transfer" class="btn btn-success">Bekræft</button>
-                                            </tc>
-                                            <tc>
-                                                <a href="/AsCustomerPages/Overview" class="btn btn-danger">Fortryd</a>
-                                            </tc>
+                                    <div class="row">
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" type="number" min="0" required asp-for="@depositAmount"><br />
+                                            <label style="color:black!important" asp-for="@depositAmount" for="floatingInput">Indsæt beløb</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" type="text" min-length="1" required asp-for="@Model.Customer_Description"><br />
+                                            <label style="color:black!important" asp-for="@Model.Customer_Description" for="floatingInput">Beskrivelse</label>
+                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6" style="padding:0">
+                                            <button id="confirmcancelbtn" asp-page-handler="Transfer" class="btn btn-success">Bekræft</button>
                                         </div>
-                                    </table>
+                                        <div class="col-md-6" style="padding:0">
+                                            <a id="confirmcancelbtn" href="/AsCustomerPages/Overview" class="btn btn-danger">Fortryd</a>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
 

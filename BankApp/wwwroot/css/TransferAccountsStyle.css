@@ -29,6 +29,13 @@
 
 #accountdropdownbtn {
     width: -webkit-fill-available;
-    display:flex;
-    justify-content:center;
+    display: flex;
+    justify-content: center;
+    background-color: #0e2238 !important;
+    color: #bdacb1 !important;
+}
+
+#confirmcancelbtn {
+    width: -webkit-fill-available;
+    color: #bdacb1;
 }
