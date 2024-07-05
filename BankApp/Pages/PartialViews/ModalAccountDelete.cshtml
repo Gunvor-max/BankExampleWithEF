@@ -1,23 +1,23 @@
 ﻿@{
 }
-<!-- Update Modal -->
-<div id="myModalUpdate-@Model.AccountID" class="modal fade" tabindex="-1" aria-labelledby="modalLabel-@Model.AccountID" aria-hidden="true">
+<!-- Delete Modal -->
+<div id="myModalDelete-@Model.AccountID" class="modal fade" tabindex="-1" aria-labelledby="modalLabel-@Model.AccountID" aria-hidden="true">
     <div class="modal-dialog">
         <!-- Modal content -->
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h4 class="modal-title w-100" id="modalLabel-@Model.AccountID">Opdater Konto</h4>
+                <h4 class="modal-title w-100" id="modalLabel-@Model.AccountID">Slet Konto</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-                Er du sikker på at du vil ændre Kontoen:
+                Er du sikker på at du vil slette Kontoen:
                 <p style="font-weight:bold"> @Model.Choosen_AccountName </p>
                 For Kunden: <p style="font-weight:bold"> @Model.Choosen_FirstName @Model.Choosen_LastName</p>
             </div>
             <!--Modal buttons -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Fortryd</button>
-                <button type="submit" asp-page-handler="UpdateAccount" class="btn btn-success" asp-route-id="@Model.AccountID">Bekræft</button>
+                <button type="submit" asp-page-handler="DeleteAccount" class="btn btn-success" asp-route-id="@Model.AccountID">Bekræft</button>
             </div>
         </div>
     </div>

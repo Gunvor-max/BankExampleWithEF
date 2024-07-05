@@ -31,7 +31,10 @@ namespace BankLib.Services
 
         public List<Account> GetAll()
         {
-            return _context.BankExampleWithEfAccounts.Include(a => a.MainAccount).ToList();
+            return _context.BankExampleWithEfAccounts
+                .Include(a => a.MainAccount)
+                .Where(i => i.IsDeleted == false)
+                .ToList();
         }
 
         public Account Read(int id)
@@ -49,7 +52,9 @@ namespace BankLib.Services
 
         public Account Update(Account theObject, int id)
         {
-            throw new NotImplementedException();
+            _context.BankExampleWithEfAccounts.Update(theObject);
+            _context.SaveChanges();
+            return theObject;
         }
 
         public void Withdraw (int id, int amount)
@@ -75,7 +80,26 @@ namespace BankLib.Services
             }
             else 
             {
-                return ReadAccountsConnectedToMain(mainAccountID).ToList();
+                return ReadAccountsConnectedToMain(mainAccountID);
+            }
+        }
+
+        public List<Account> Search(string search)
+        {
+            if (search is not null)
+            {
+                var result = GetAll()
+            .Where(e => e.Name.ToLower().Contains(search.ToLower())).ToList();
+                if (result.Count != 0)
+                {
+                    return result;
+                }
+                return GetAll()
+            .Where(e => e.Type.ToLower().Contains(search.ToLower())).ToList(); // Find account from name
+            }
+            else
+            {
+                return GetAll();
             }
         }
     }

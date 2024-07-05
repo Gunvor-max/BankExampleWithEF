@@ -11,7 +11,7 @@ namespace BankLib.Model;
 [Table("BankExampleWithEF_Account")]
 public partial class Account
 {
-    public Account(int accountId, int mainAccountId, string name, string type, int balance, decimal interestrate)
+    public Account(int accountId, int mainAccountId, string name, string type, int balance, decimal interestrate, bool isDeleted)
     {
         AccountId = accountId;
         MainAccountId = mainAccountId;
@@ -19,9 +19,10 @@ public partial class Account
         Type = type;
         Balance = balance;
         Interestrate = interestrate;
+        IsDeleted = isDeleted;
     }
 
-    public Account():this(0,0,"Default","Default",0,0)
+    public Account():this(0,0,"Default","Default",0,0,false)
     {
     }
 
@@ -43,6 +44,9 @@ public partial class Account
 
     [Column(TypeName = "decimal(18, 0)")]
     public decimal Interestrate { get; set; }
+
+    [Column("IsDeleted")]
+    public bool IsDeleted { get; set; }
 
     [InverseProperty("Account")]
     public virtual ICollection<Transaction> BankExampleWithEfTransactions { get; set; } = new List<Transaction>();

@@ -11,6 +11,7 @@
     bool isEditTriggered = Model.IsEditTriggered;
     bool isCreatedConfirmation = Model.IsCreatedConfirmation;
     bool canSetPassWord = Model.CanSetPassword;
+    bool isChoosen = Model.IsChoosen;
     bool isUpdatedConfirmation = Model.IsUpdatedConfirmation;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 }
@@ -47,7 +48,7 @@
         }
         <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
             <div class="row custom-row">
-                <div class="col-md-6 custom-col">
+                <div class="col custom-col">
 
                     <form method="post">
                         <input class="form-control mb-3" type="text" asp-for="@Model.Search" placeholder="Søg efter konti..." />
@@ -69,7 +70,7 @@
                             {
                                 <tr class="clickable-row" id="customerRow">
                                     <form method="post" asp-page-handler="SelectAccount" asp-route-accountId="@a.AccountId" id="@a.AccountId">
-                                        @if (Model.GetCustomerFromMainAccount(a.MainAccountId) is not null && Model.GetCustomerFromMainAccount(a.MainAccountId).IsDeleted == false)
+                                        @if (Model.GetCustomerFromMainAccount(a.MainAccountId) is not null)
                                         {
                                         <td>
                                                 @Model.GetCustomerFromMainAccount(a.MainAccountId).FirstName
@@ -100,64 +101,70 @@
                         });
                     </script>
                 </div>
-                <div class="col-md-6 custom-col">
-                    <form method="post">
-                        <h4>Konto oplysninger:</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" readonly/>
-                                    <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
+                @if (isChoosen)
+                {
+                    <div class="col-md-6 custom-col">
+                        <form method="post">
+                            <h4>Konto oplysninger:</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" readonly />
+                                        <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" readonly />
+                                        <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
+                                    </div>
                                 </div>
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" readonly/>
-                                    <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.AccountID" asp-for="AccountID" required readonly />
+                                        <label asp-for="AccountID" for="floatingInput">Konto Id</label>
+                                    </div>
+                                    <div class="form-floating mt-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
+                                        <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mt-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
+                                        <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.AccountID" asp-for="AccountID" required readonly />
-                                    <label asp-for="AccountID" for="floatingInput">Konto Id</label>
-                                </div>
-                                <div class="form-floating mt-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mt-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                                    <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
-                                </div>
-                            </div>
-                        </div>
-                        @if (isEditMode)
-                        {
-                            @if (isEditTriggered)
+                            @if (isEditMode)
                             {
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.AccountID" data-employee-id="@Model.AccountID">Gem ændringer</button>
-                                <!-- PartielView to trigger the AccountUpdate modal-->
-                                <partial name="PartialViews/ModalAccountUpdate" />
+                                @if (isEditTriggered)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button id="editanddelete" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.AccountID" data-employee-id="@Model.AccountID">Gem ændringer</button>
+                                        </div>
+                                    </div>
+                                    <!-- PartielView to trigger the AccountUpdate modal-->
+                                    <partial name="PartialViews/ModalAccountUpdate" />
+                                }
                             }
-                        }
-                        else if (isDeleteAble)
-                        {
-                            <button type="submit" asp-page-handler="EnableEdit" asp-route-accountId="@Model.AccountID" class="btn btn-outline-warning">Ret</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.CustomerID" data-employee-id="@Model.CustomerID">X</button>
-                        }
-                        @if (!isEditMode)
-                        {
-                            <button type="submit" asp-page-handler="ActivateCreateCustomer" class="btn btn-success">Opret Kunde</button>
-                        }
-                        else
-                        {
-                            <button type="submit" asp-page-handler="CreateCustomer" class="btn btn-success">Opret Kunde</button>
-                        }
-                        <!-- PartielView to trigger the EmployeeDelete modal-->
-                        @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
+                            else if (isDeleteAble)
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="editanddelete" type="submit" asp-page-handler="EnableEdit" asp-route-accountId="@Model.AccountID" class="btn btn-outline-warning">Ret</button>
+                                    </div>
 
-                    </form>
-                </div>
+                                    <div class="col-md-12">
+                                        <button id="editanddelete" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#myModalDelete-@Model.AccountID" data-account-id="@Model.AccountID">Slet</button>
+                                    </div>
+                                </div>
+                            }
+                            <!-- PartielView to trigger the EmployeeDelete modal-->
+                            <partial name="PartialViews/ModalAccountDelete" />
+
+                        </form>
+                    </div>
+                }
             </div>
         </div>
     </div>

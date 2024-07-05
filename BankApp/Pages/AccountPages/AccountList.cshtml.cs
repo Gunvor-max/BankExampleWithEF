@@ -47,6 +47,7 @@ namespace BankApp.Pages.AccountPages
         public bool IsCreatedConfirmation { get; set; } = false;
         public bool IsUpdatedConfirmation { get; set; } = false;
         public bool CanSetPassword { get; set; } = false;
+        public bool IsChoosen { get; set; } = false;
         public void OnGet()
         {
             //Check if the user has the proper accesslevel to view the page
@@ -76,14 +77,20 @@ namespace BankApp.Pages.AccountPages
 
         public IActionResult OnPostSearchAccounts()
         {
-            var listcustomers = _customerRepository.Search(Search);
-            foreach (var customer in listcustomers) 
+            if(Search is not null)
             {
-                Accounts = _accountRepository.ReadAccountsConnectedToMain(customer.MainAccountId);
-                return Page();
+            var listcustomers = _customerRepository.Search(Search);
+            if (listcustomers.Count != 0)
+            {
+                foreach (var customer in listcustomers)
+                {
+                    Accounts = _accountRepository.ReadAccountsConnectedToMain(customer.MainAccountId);
+                    return Page();
+                }
+            } 
             }
-            Accounts = new List<Account>();
-            return Page();
+                Accounts = _accountRepository.Search(Search);
+                return Page();
         }
 
         public void OnPostSelectAccount(int accountId)
@@ -108,6 +115,7 @@ namespace BankApp.Pages.AccountPages
             }
             IsEditMode = false;
             IsDeleteable = true;
+            IsChoosen = true;
         }
 
         public void OnPostEnableEdit(int accountId)
@@ -127,10 +135,15 @@ namespace BankApp.Pages.AccountPages
 
             IsEditMode = true;
             IsEditTriggered = true;
+            IsChoosen = true;
         }
 
-        public void OnPostDeleteCustomer(int id)
+        public void OnPostDeleteAccount(int id)
         {
+            Account account = _accountRepository.Read(id);
+            account.IsDeleted = true;
+            ShowAccount = _accountRepository.Update(account, id);
+            Accounts = _accountRepository.GetAll();
             IsDeletedConfirmation = true;
         }
 
@@ -143,6 +156,7 @@ namespace BankApp.Pages.AccountPages
                 choosenAccount.Name = Choosen_AccountName;
                 choosenAccount.Type = Choosen_AccountType;
                 ShowAccount = _accountRepository.Update(choosenAccount, accountId);
+                Accounts = _accountRepository.GetAll();
                 IsUpdatedConfirmation = true;
             }
         }

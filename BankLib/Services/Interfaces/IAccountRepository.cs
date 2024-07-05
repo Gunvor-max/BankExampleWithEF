@@ -13,5 +13,6 @@ namespace BankLib.Services.Interfaces
         public void Withdraw(int id, int amount);
         public void Deposit(int id, int amount);
         public List<Account> Search(string search, int mainAccountID);
+        public List<Account> Search(string search);
     }
 }

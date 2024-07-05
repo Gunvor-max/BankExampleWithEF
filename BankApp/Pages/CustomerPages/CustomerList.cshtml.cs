@@ -142,8 +142,18 @@ namespace BankApp.Pages.CustomerPages
         public void OnPostDeleteCustomer(int id)
         {
             Customer customer = _customerRepository.Read(id);
+            List<Account> accounts = _accountRepository.ReadAccountsConnectedToMain(customer.MainAccountId);
+
+            //Delete customer
             customer.IsDeleted = true;
             ShowCustomer = _customerRepository.Update(customer, id);
+
+            //Delete Accounts connected to customer
+            foreach (Account account in accounts)
+            {
+                account.IsDeleted = true;
+                _accountRepository.Update(account, id);
+            }
             Customers = _customerRepository.GetAll();
             IsDeletedConfirmation = true;
 
