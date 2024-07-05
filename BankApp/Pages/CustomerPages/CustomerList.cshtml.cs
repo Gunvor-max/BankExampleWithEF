@@ -141,7 +141,12 @@ namespace BankApp.Pages.CustomerPages
 
         public void OnPostDeleteCustomer(int id)
         {
+            Customer customer = _customerRepository.Read(id);
+            customer.IsDeleted = true;
+            ShowCustomer = _customerRepository.Update(customer, id);
+            Customers = _customerRepository.GetAll();
             IsDeletedConfirmation = true;
+
         }
 
         public void OnPostUpdateCustomer(int id)

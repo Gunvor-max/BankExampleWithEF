@@ -184,13 +184,21 @@
                             {
                                 @if (isEditTriggered)
                                 {
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.CustomerID" data-employee-id="@Model.CustomerID">Gem ændringer</button>
-                                    <!-- PartielView to trigger the EmployeeUpdate modal-->
-                                    @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                    <button id="editanddelete" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.CustomerID" data-customer-id="@Model.CustomerID">Gem ændringer</button>
+                                    </div>
+                                    </div>
+                                    <!-- PartielView to trigger the CustomerUpdate modal-->
+                                    <partial name="PartialViews/ModalCustomerUpdate" />
                                 }
                                 @if (isChoosenToCreate)
                                 {
-                                    <button type="submit" asp-page-handler="CreateCustomer" class="btn btn-success">Opret Kunde</button>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                    <button id="editanddelete" type="submit" asp-page-handler="CreateCustomer" class="btn btn-success">Opret Kunde</button>
+                                        </div>
+                                    </div>
                                 }
                             }
                             else if (isDeleteAble)
@@ -200,15 +208,15 @@
                                         <button id="editanddelete" type="submit" asp-page-handler="EnableEdit" asp-route-id="@Model.CustomerID" class="btn btn-outline-warning">Ret</button>
                                     </div>
                                     <div class="col-md-12">
-                                        <button id="editanddelete" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#myModal-@Model.CustomerID" data-employee-id="@Model.CustomerID">Slet</button>
+                                        <button id="editanddelete" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#myModalDelete-@Model.CustomerID" data-employee-id="@Model.CustomerID">Slet</button>
                                     </div>
                                     <div class="col-md-12">
                                         <button id="editanddelete" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalCreateAccount-@Model.CustomerID" data-employee-id="@Model.CustomerID">Opret Konto</button>
                                         </div>
                                 </div>
                             }
-                            <!-- PartielView to trigger the EmployeeDelete modal-->
-                            @*  <partial name="PartialView/ModalEmployeeDelete" /> *@
+                            <!-- PartielView to trigger the CustomerDelete modal-->
+                            <partial name="PartialViews/ModalCustomerDelete" />
                         </form>
                         <!-- PartielView to trigger the CreateAccount modal-->
                         <partial name="PartialViews/ModalCreateAccount" />

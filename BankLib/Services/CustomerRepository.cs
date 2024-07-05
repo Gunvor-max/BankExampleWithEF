@@ -47,6 +47,7 @@ namespace BankLib.Services
         .Include(e => e.Address.City) // Include City entity
         .Include(e => e.Address.City.ZipCode) // Include Zipcode entity
         .Include(e => e.MainAccount) // Include MainAccount entity;
+        .Where(e => e.IsDeleted == false)
         .ToList();
         }
 

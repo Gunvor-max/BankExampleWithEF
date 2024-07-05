@@ -24,25 +24,25 @@
         @if (isDeletedConfirmation)
         {
             <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu slettet fra systemet
-                </h3>
+                <h5>
+                    Kontoen @Model.ShowAccount.Name er nu slettet fra systemet
+                </h5>
             </div>
         }
         @if (isCreatedConfirmation)
         {
             <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu oprettet i systemet
-                </h3>
+                <h5>
+                    Kontoen @Model.ShowAccount.Name er nu oprettet i systemet
+                </h5>
             </div>
         }
         @if (isUpdatedConfirmation)
         {
             <div class="alert-success">
-                <h3>
-                    Medarbejderen: <span style="font-weight:bold"> @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName </span> er nu opdateret i systemet
-                </h3>
+                <h5>
+                    Kontoen @Model.ShowAccount.Name er nu opdateret i systemet
+                </h5>
             </div>
         }
         <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
@@ -69,34 +69,25 @@
                             {
                                 <tr class="clickable-row" id="customerRow">
                                     <form method="post" asp-page-handler="SelectAccount" asp-route-accountId="@a.AccountId" id="@a.AccountId">
-                                        @if (Model.GetCustomerFromMainAccount(a.MainAccountId) is not null)
+                                        @if (Model.GetCustomerFromMainAccount(a.MainAccountId) is not null && Model.GetCustomerFromMainAccount(a.MainAccountId).IsDeleted == false)
                                         {
-                                    <td>
-                                            @Model.GetCustomerFromMainAccount(a.MainAccountId).FirstName
-                                    </td>
-                                    <td>
-                                            @Model.GetCustomerFromMainAccount(a.MainAccountId).LastName
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                Ingen kunde tilknyttet
-                                            </td>
-                                            <td>
-                                            Ingen kunde tilknyttet
-                                            </td>
-                                        }
                                         <td>
-                                            @a.AccountId
-                                    </td>
-                                    <td>
-                                            @a.Name
-                                    </td>
-                                    <td>
-                                            @a.Type
-                                    </td>
-                                </form>
+                                                @Model.GetCustomerFromMainAccount(a.MainAccountId).FirstName
+                                        </td>
+                                        <td>
+                                                @Model.GetCustomerFromMainAccount(a.MainAccountId).LastName
+                                        </td>
+                                        <td>
+                                                @a.AccountId
+                                        </td>
+                                        <td>
+                                                @a.Name
+                                        </td>
+                                        <td>
+                                                @a.Type
+                                        </td>
+                                        }
+                                    </form>
                                 </tr>
                             }
                         </tbody>
@@ -115,11 +106,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" readonly/>
                                     <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" required readonly="@(isEditMode ? false : true)" />
+                                    <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" readonly/>
                                     <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
                                 </div>
                             </div>
@@ -144,9 +135,9 @@
                         {
                             @if (isEditTriggered)
                             {
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.CustomerID" data-employee-id="@Model.CustomerID">Gem ændringer</button>
-                                <!-- PartielView to trigger the EmployeeUpdate modal-->
-                                @* <partial name="PartialView/ModalEmployeeUpdate" /> *@
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.AccountID" data-employee-id="@Model.AccountID">Gem ændringer</button>
+                                <!-- PartielView to trigger the AccountUpdate modal-->
+                                <partial name="PartialViews/ModalAccountUpdate" />
                             }
                         }
                         else if (isDeleteAble)

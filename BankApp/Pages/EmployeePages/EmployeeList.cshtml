@@ -226,7 +226,11 @@
                                 }
                                 @if(isChoosenToCreate)
                                 {
-                                    <button type="submit" asp-page-handler="CreateEmployee" class="btn btn-success">Opret Medarbejder</button>
+                                    <div class="row">
+                                    <div class="col-md-12">
+                                    <button id="editanddelete" type="submit" asp-page-handler="CreateEmployee" class="btn btn-success">Opret Medarbejder</button>
+                                    </div>
+                                    </div>
                                 }
                             }
                             else if (isDeleteAble)

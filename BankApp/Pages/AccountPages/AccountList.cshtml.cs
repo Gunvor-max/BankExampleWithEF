@@ -41,7 +41,7 @@ namespace BankApp.Pages.AccountPages
         public bool IsEditMode { get; set; } = false;
         public bool IsDeleteable { get; set; } = false;
         public bool IsDeletedConfirmation { get; set; } = false;
-        public Customer ShowCustomer { get; set; }
+        public Account ShowAccount { get; set; }
         public bool IsCustomerAgent { get; set; }
         public bool IsEditTriggered { get; set; } = false;
         public bool IsCreatedConfirmation { get; set; } = false;
@@ -112,7 +112,6 @@ namespace BankApp.Pages.AccountPages
 
         public void OnPostEnableEdit(int accountId)
         {
-            bool isEmployee = true;
 
             Account choosenAccount = _accountRepository.Read(accountId);
             //Customer
@@ -135,29 +134,17 @@ namespace BankApp.Pages.AccountPages
             IsDeletedConfirmation = true;
         }
 
-        public void OnPostUpdateCustomer(int id)
+        public void OnPostUpdateAccount(int accountId)
         {
-            //bool isEmployee = true;
+            Account choosenAccount = _accountRepository.Read(accountId);
 
-            //Customer customer = _customerRepository.Read(id);
-
-            //if (id != 0)
-            //{
-            //    if (customer is not null)
-            //    {
-            //        customer.FirstName = Choosen_FirstName;
-            //        customer.LastName = Choosen_LastName;
-            //        customer.Mail = Choosen_Mail;
-            //        customer.PhoneNumber = Choosen_PhoneNumber;
-            //        customer.Address.StreetName = Choosen_StreetName;
-            //        customer.Address.HouseNumber = Choosen_HouseNumber;
-            //        customer.Address.City.CityName = Choosen_City;
-            //        customer.Address.City.ZipCode.ZipCode = Choosen_ZipCode;
-            //        ShowCustomer = _customerRepository.Update(customer, id);
-            //        Customers = _customerRepository.GetAll();
-            //        IsUpdatedConfirmation = true;
-            //    }
-            //}
+            if (accountId != 0)
+            {
+                choosenAccount.Name = Choosen_AccountName;
+                choosenAccount.Type = Choosen_AccountType;
+                ShowAccount = _accountRepository.Update(choosenAccount, accountId);
+                IsUpdatedConfirmation = true;
+            }
         }
 
         public void OnPostActivateCreateCustomerAgent()

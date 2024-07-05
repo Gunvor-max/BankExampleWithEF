@@ -1,22 +1,22 @@
 ﻿@{
 }
-<!-- Update Modal -->
-<div id="myModalUpdate-@Model.EmployeeId" class="modal fade" tabindex="-1" aria-labelledby="modalLabel-@Model.EmployeeId" aria-hidden="true">
+<!-- Delete Modal -->
+<div id="myModalDelete-@Model.CustomerID" class="modal fade" tabindex="-1" aria-labelledby="modalLabel-@Model.CustomerID" aria-hidden="true">
     <div class="modal-dialog">
         <!-- Modal content -->
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h4 class="modal-title w-100" id="modalLabel-@Model.EmployeeId">Opdater Medarbejder</h4>
+                <h4 class="modal-title w-100" id="modalLabel-@Model.CustomerID">Slet Kunde</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-                Er du sikker på at du vil ændre Medarbejderen:
+                Er du sikker på at du vil slette Kunden:
                 <p style="font-weight:bold"> @Model.Choosen_FirstName @Model.Choosen_LastName</p>
             </div>
             <!--Modal buttons -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Fortryd</button>
-                <button type="submit" asp-page-handler="UpdateEmployee" class="btn btn-success" asp-route-id="@Model.EmployeeId">Bekræft</button>
+                <button type="submit" asp-page-handler="DeleteCustomer" class="btn btn-success" asp-route-id="@Model.CustomerID">Bekræft</button>
             </div>
         </div>
     </div>
