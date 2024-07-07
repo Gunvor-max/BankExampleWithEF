@@ -11,6 +11,7 @@ namespace BankLib.Services.Interfaces
     {
         bool CheckUser(string email, string password);
         Customer Isloggedin { get; }
+        public string? LogText { get; set; }
         List<Customer> Search(string search);
     }
 }

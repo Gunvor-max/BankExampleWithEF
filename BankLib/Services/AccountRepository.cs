@@ -19,7 +19,7 @@ namespace BankLib.Services
 
         public Account Create(Account theObject)
         {
-            _context.Add(theObject);
+            _context.BankExampleWithEfAccounts.Add(theObject);
             _context.SaveChanges();
             return theObject;
         }

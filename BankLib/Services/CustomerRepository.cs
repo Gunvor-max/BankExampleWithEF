@@ -12,11 +12,12 @@ namespace BankLib.Services
     public class CustomerRepository : ICustomerRepository
     {
         private EFContext _context;
+        public string? LogText { get; set; }
+        public Customer Isloggedin { get; set; }
         public CustomerRepository()
         {
             _context = new EFContext();
         }
-        public Customer Isloggedin { get; set; }
 
         public bool CheckUser(string email, string password)
         {
@@ -73,6 +74,32 @@ namespace BankLib.Services
 
         public Customer Update(Customer theObject, int id)
         {
+            LogText = string.Empty;
+            var changes = _context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
+            foreach (var change in changes)
+            {
+                // Get the entity type
+                var entityType = change.Entity.GetType().Name;
+
+                foreach (var property in change.CurrentValues.Properties)
+                {
+                    // Get the property name
+                    var propertyName = property.Name;
+
+                    // Get the current value
+                    var currentValue = change.CurrentValues[propertyName];
+
+                    // Get the original value (if available)
+                    var originalValue = change.OriginalValues[propertyName];
+
+                    if(originalValue.ToString() != currentValue.ToString())
+                    {
+                    // Process the information
+                    LogText += ($"Type={entityType}, Property={propertyName}, Original={originalValue}, Current={currentValue}:");
+                    }
+                }
+            }
+
             _context.BankExampleWithEfCustomers.Update(theObject);
             _context.SaveChanges();
             return theObject;

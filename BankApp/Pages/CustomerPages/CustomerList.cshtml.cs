@@ -3,6 +3,7 @@ using BankLib.Services;
 using BankLib.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankApp.Pages.CustomerPages
 {
@@ -11,14 +12,17 @@ namespace BankApp.Pages.CustomerPages
         private readonly ICustomerRepository _customerRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly ITransactionRepository _transactionRepository;
-        public CustomerListModel(ICustomerRepository customerRepository, IAccountRepository accountRepository, ITransactionRepository transactionRepository)
+        private readonly ILogRepository _logRepository;
+        public CustomerListModel(ICustomerRepository customerRepository, IAccountRepository accountRepository, ITransactionRepository transactionRepository, ILogRepository logRepository)
         {
             _customerRepository = customerRepository;
             _accountRepository = accountRepository;
             _transactionRepository = transactionRepository;
+            _logRepository = logRepository;
             Customers = _customerRepository.GetAll();
         }
         public List<Customer> Customers { get; set; }
+        public static Employee? EmployeeLoggedIn { get; set; }
 
         [BindProperty]
         public string? Search { get; set; }
@@ -73,9 +77,8 @@ namespace BankApp.Pages.CustomerPages
             if (SessionHelper.Get<object>(user, HttpContext)?.ToString()?.Contains("AccessLevel") ?? false)
             {
                 //Session is retrieved as an employee object, and further restrictions can be set depending on accesslevel
-                Employee? employee = null;
-                employee = SessionHelper.Get<Employee>(employee, HttpContext);
-                if (employee?.Position.AccessLevel < 4)
+                EmployeeLoggedIn = SessionHelper.Get<Employee>(EmployeeLoggedIn, HttpContext);
+                if (EmployeeLoggedIn?.Position.AccessLevel < 4)
                 {
                     Response.Redirect("/LoginPages/Login");
                 }
@@ -179,6 +182,16 @@ namespace BankApp.Pages.CustomerPages
                     customer.Address.City.ZipCode.ZipCode = Choosen_ZipCode;
                     ShowCustomer = _customerRepository.Update(customer, id);
                     Customers = _customerRepository.GetAll();
+
+                    //Create log
+                    EmployeeLog Log = new EmployeeLog
+                    {
+                        ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                        Date = DateTime.UtcNow,
+                        Activity = _customerRepository.LogText,
+                        AffectedCustomerId = customer.CustomerId,
+                    };
+                    _logRepository.Create(Log);
                     IsUpdatedConfirmation = true;
                 }
             }

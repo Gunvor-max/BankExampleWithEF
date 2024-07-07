@@ -37,7 +37,6 @@ public partial class EmployeeLog
     public DateTime Date { get; set; }
 
     [Required]
-    [StringLength(50)]
     public string Activity { get; set; }
 
     [Column("AffectedEmployee_Id")]

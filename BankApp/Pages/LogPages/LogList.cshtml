@@ -1,0 +1,171 @@
+﻿@page
+@model BankApp.Pages.LogPages.LogListModel
+@using BankLib.Model;
+@{
+    ViewData["Title"] = "Liste af logs";
+    ViewData["SidebarVisible"] = true;
+    bool isEditMode = Model.IsEditMode;
+    bool isDeleteAble = Model.IsDeleteable;
+    bool isDeletedConfirmation = Model.IsDeletedConfirmation;
+    bool isCustomerAgent = Model.IsCustomerAgent;
+    bool isEditTriggered = Model.IsEditTriggered;
+    bool isCreatedConfirmation = Model.IsCreatedConfirmation;
+    bool canSetPassWord = Model.CanSetPassword;
+    bool isChoosen = Model.IsChoosen;
+    bool isUpdatedConfirmation = Model.IsUpdatedConfirmation;
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+}
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/CustomerStyle.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid mt-3">
+        <a id="Headline" href="/LogPages/LogList">
+            <h1>Logs</h1>
+        </a>
+        @if (isDeletedConfirmation)
+        {
+            <div class="alert-success">
+                <h5>
+                    Kontoen @Model.ShowAccount.Name er nu slettet fra systemet
+                </h5>
+            </div>
+        }
+        @if (isCreatedConfirmation)
+        {
+            <div class="alert-success">
+                <h5>
+                    Kontoen @Model.ShowAccount.Name er nu oprettet i systemet
+                </h5>
+            </div>
+        }
+        @if (isUpdatedConfirmation)
+        {
+            <div class="alert-success">
+                <h5>
+                    Kontoen @Model.ShowAccount.Name er nu opdateret i systemet
+                </h5>
+            </div>
+        }
+        <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
+            <div class="row custom-row">
+                <div class="col custom-col">
+
+                    <form method="post">
+                        <input class="form-control mb-3" type="text" asp-for="@Model.Search" placeholder="Søg efter konti..." />
+                        <input type="submit" asp-page-handler="SearchAccounts" class="btn btn-primary visually-hidden" value="søg" />
+                    </form>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Log ID</th>
+                                <th>Ansvarlige medarbejder</th>
+                                <th>Dato</th>
+                                <th>Påvirket kunde/medarbejder</th>
+                                <th>Aktivitet</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (EmployeeLog e in Model.Logs)
+                            {
+                                <tr class="clickable-row" id="customerRow">
+                                    <form method="post" asp-page-handler="SelectAccount" asp-route-accountId="@e.LogId" id="@e.LogId">
+                                        <td>
+                                                @e.LogId
+                                        </td>
+                                        <td>
+                                            @Model.GetResponsibleEmployee(e.ResponsibleEmployeeId).FirstName @Model.GetResponsibleEmployee(e.ResponsibleEmployeeId).LastName, id @e.ResponsibleEmployeeId
+                                    </td>
+                                        <td>
+                                                @e.Date
+                                        </td>
+                                        <td>
+                                            @(e.AffectedEmployee is null ? $"{Model.GetAffectedCustomer(e.AffectedCustomerId).FirstName} {Model.GetAffectedCustomer(e.AffectedCustomerId).LastName}" : $"{Model.GetAffectedEmployee(e.AffectedEmployeeId).FirstName} {Model.GetAffectedEmployee(e.AffectedEmployeeId).LastName}")
+                                        </td>
+                                        <td>
+                                                @e.Activity
+                                        </td>
+                                    </form>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <script>
+                        $(".clickable-row").click(function () {
+                            var clickedRow = $(this); // Get the clicked row element
+                            var formToSubmit = clickedRow.find("form"); // Find the form within the row
+                            formToSubmit.submit(); // Submit the found form
+                        });
+                    </script>
+                </div>
+                @if (isChoosen)
+                {
+                    <div class="col-md-6 custom-col">
+                        <form method="post">
+                            <h4>Konto oplysninger:</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" readonly />
+                                        <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" readonly />
+                                        <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.AccountID" asp-for="AccountID" required readonly />
+                                        <label asp-for="AccountID" for="floatingInput">Konto Id</label>
+                                    </div>
+                                    <div class="form-floating mt-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
+                                        <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mt-3">
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
+                                        <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (isEditMode)
+                            {
+                                @if (isEditTriggered)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button id="editanddelete" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.AccountID" data-employee-id="@Model.AccountID">Gem ændringer</button>
+                                        </div>
+                                    </div>
+                                    <!-- PartielView to trigger the AccountUpdate modal-->
+                                    <partial name="PartialViews/ModalAccountUpdate" />
+                                }
+                            }
+                            else if (isDeleteAble)
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="editanddelete" type="submit" asp-page-handler="EnableEdit" asp-route-accountId="@Model.AccountID" class="btn btn-outline-warning">Ret</button>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <button id="editanddelete" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#myModalDelete-@Model.AccountID" data-account-id="@Model.AccountID">Slet</button>
+                                    </div>
+                                </div>
+                            }
+                            <!-- PartielView to trigger the EmployeeDelete modal-->
+                            <partial name="PartialViews/ModalAccountDelete" />
+
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>
