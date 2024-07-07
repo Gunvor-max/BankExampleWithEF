@@ -21,6 +21,7 @@ namespace BankApp.Pages.LogPages
         public Employee ResponsibleEmployee { get; set; }
         public Employee AffectedEmployee { get; set; }
         public Customer AffectedCustomer { get; set; }
+        public string LogText { get; set; }
 
         [BindProperty]
         public string? Search { get; set; }
@@ -109,30 +110,43 @@ namespace BankApp.Pages.LogPages
         //    return Page();
         //}
 
-        //public void OnPostSelectAccount(int accountId)
-        //{
-        //    Account choosenAccount = _accountRepository.Read(accountId);
+        public void OnPostSelectLog(int LogId, string LogType)
+        {
+            switch (LogType)
+            {
+                case "Customer Created":
+                    LogText = _logRepository.Read(LogId).Activity;
+                    break;
+                case "Customer Updated":
+                    LogText = _logRepository.Read(LogId).Activity.Replace(":", "\n").TrimStart();
+                    break;
+                default:
+                    break;
+            }
 
-        //    if (accountId != 0)
-        //    {
-        //        if (choosenAccount is not null)
-        //        {
-        //            //Customer
-        //            var customer = _customerRepository.GetAll().First(ma => ma.MainAccountId == choosenAccount.MainAccountId);
-        //            CustomerID = customer.CustomerId;
-        //            Choosen_FirstName = customer.FirstName;
-        //            Choosen_LastName = customer.LastName;
 
-        //            //Account
-        //            AccountID = choosenAccount.AccountId;
-        //            Choosen_AccountName = choosenAccount.Name;
-        //            Choosen_AccountType = choosenAccount.Type;
-        //        }
-        //    }
-        //    IsEditMode = false;
-        //    IsDeleteable = true;
-        //    IsChoosen = true;
-        //}
+            //Account choosenAccount = _accountRepository.Read(accountId);
+
+            //if (accountId != 0)
+            //{
+            //    if (choosenAccount is not null)
+            //    {
+            //        //Customer
+            //        var customer = _customerRepository.GetAll().First(ma => ma.MainAccountId == choosenAccount.MainAccountId);
+            //        CustomerID = customer.CustomerId;
+            //        Choosen_FirstName = customer.FirstName;
+            //        Choosen_LastName = customer.LastName;
+
+            //        //Account
+            //        AccountID = choosenAccount.AccountId;
+            //        Choosen_AccountName = choosenAccount.Name;
+            //        Choosen_AccountType = choosenAccount.Type;
+            //    }
+            //}
+            IsEditMode = false;
+            IsDeleteable = true;
+            IsChoosen = true;
+        }
 
         //public void OnPostEnableEdit(int accountId)
         //{

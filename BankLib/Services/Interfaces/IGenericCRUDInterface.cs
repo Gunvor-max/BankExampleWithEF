@@ -11,7 +11,7 @@ namespace BankLib.Services.Interfaces
         public T Create(T theObject);
         public T Read(int id);
         public T Update(T theObject, int id);
-        public T Delete(int id);
+        public T Delete(T theObject);
         public List<T> GetAll();
     }
 }

@@ -24,7 +24,7 @@ namespace BankLib.Services
             return theObject;
         }
 
-        public Transaction Delete(int id)
+        public Transaction Delete(Transaction theObject)
         {
             throw new NotImplementedException();
         }

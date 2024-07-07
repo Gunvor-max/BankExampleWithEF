@@ -24,7 +24,7 @@ namespace BankLib.Services
             return theObject;
         }
 
-        public EmployeeLog Delete(int id)
+        public EmployeeLog Delete(EmployeeLog theObject)
         {
             throw new NotImplementedException();
         }

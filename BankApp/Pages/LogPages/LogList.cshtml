@@ -71,7 +71,7 @@
                             @foreach (EmployeeLog e in Model.Logs)
                             {
                                 <tr class="clickable-row" id="customerRow">
-                                    <form method="post" asp-page-handler="SelectAccount" asp-route-accountId="@e.LogId" id="@e.LogId">
+                                    <form method="post" asp-page-handler="SelectLog" asp-route-LogId="@e.LogId" asp-route-LogType="@e.Type" id="@e.LogId">
                                         <td>
                                                 @e.LogId
                                         </td>
@@ -85,7 +85,7 @@
                                             @(e.AffectedEmployee is null ? $"{Model.GetAffectedCustomer(e.AffectedCustomerId).FirstName} {Model.GetAffectedCustomer(e.AffectedCustomerId).LastName}" : $"{Model.GetAffectedEmployee(e.AffectedEmployeeId).FirstName} {Model.GetAffectedEmployee(e.AffectedEmployeeId).LastName}")
                                         </td>
                                         <td>
-                                                @e.Activity
+                                                @e.Type
                                         </td>
                                     </form>
                                 </tr>
@@ -104,34 +104,9 @@
                 {
                     <div class="col-md-6 custom-col">
                         <form method="post">
-                            <h4>Konto oplysninger:</h4>
+                            <h4>Log oplysninger:</h4>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_FirstName" asp-for="Choosen_FirstName" minlength="2" maxlength="30" readonly />
-                                        <label asp-for="Choosen_FirstName" for="floatingInput">Fornavn</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_LastName" asp-for="Choosen_LastName" minlength="1" maxlength="30" readonly />
-                                        <label asp-for="Choosen_LastName" for="floatingInput">Efternavn</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInput" value="@Model.AccountID" asp-for="AccountID" required readonly />
-                                        <label asp-for="AccountID" for="floatingInput">Konto Id</label>
-                                    </div>
-                                    <div class="form-floating mt-3">
-                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                                        <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mt-3">
-                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                                        <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
-                                    </div>
-                                </div>
+                            <textarea id="floatingInput" rows="30" class="col-md-12 custom-col" name="floatingInput" readonly>@Model.LogText</textarea>
                             </div>
                             @if (isEditMode)
                             {

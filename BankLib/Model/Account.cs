@@ -54,4 +54,9 @@ public partial class Account
     [ForeignKey("MainAccountId")]
     [InverseProperty("BankExampleWithEfAccounts")]
     public virtual MainAccount MainAccount { get; set; }
+
+    public override string ToString()
+    {
+        return $"{{Class=Account: {nameof(AccountId)}={AccountId.ToString()}, {nameof(MainAccountId)}={MainAccountId.ToString()}, {nameof(Name)}={Name}, {nameof(Type)}={Type}, {nameof(Balance)}={Balance.ToString()}, {nameof(Interestrate)}={Interestrate.ToString()}, {nameof(IsDeleted)}={IsDeleted.ToString()}, {nameof(MainAccount)}={MainAccount}}}";
+    }
 }

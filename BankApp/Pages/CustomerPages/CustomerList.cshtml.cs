@@ -149,13 +149,34 @@ namespace BankApp.Pages.CustomerPages
 
             //Delete customer
             customer.IsDeleted = true;
-            ShowCustomer = _customerRepository.Update(customer, id);
+            ShowCustomer = _customerRepository.Delete(customer);
+
+            //Create log
+            EmployeeLog Log = new EmployeeLog
+            {
+                ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                Date = DateTime.UtcNow,
+                Activity = _customerRepository.LogText,
+                Type = "Customer Deleted",
+                AffectedCustomerId = customer.CustomerId,
+            };
+            _logRepository.Create(Log);
 
             //Delete Accounts connected to customer
             foreach (Account account in accounts)
             {
                 account.IsDeleted = true;
-                _accountRepository.Update(account, id);
+                _accountRepository.Delete(account);
+
+                EmployeeLog LogAccount = new EmployeeLog
+                {
+                    ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                    Date = DateTime.UtcNow,
+                    Activity = _customerRepository.LogText,
+                    Type = "Account Deleted",
+                    AffectedCustomerId = customer.CustomerId,
+                };
+                _logRepository.Create(LogAccount);
             }
             Customers = _customerRepository.GetAll();
             IsDeletedConfirmation = true;
@@ -189,6 +210,7 @@ namespace BankApp.Pages.CustomerPages
                         ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
                         Date = DateTime.UtcNow,
                         Activity = _customerRepository.LogText,
+                        Type = "Customer Updated",
                         AffectedCustomerId = customer.CustomerId,
                     };
                     _logRepository.Create(Log);
@@ -226,6 +248,16 @@ namespace BankApp.Pages.CustomerPages
             };
             ShowCustomer = _customerRepository.Create(newcustomer);
             Customers = _customerRepository.GetAll();
+
+            EmployeeLog Log = new EmployeeLog
+            {
+                ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                Date = DateTime.UtcNow,
+                Activity = _customerRepository.LogText,
+                Type = "Customer Created",
+                AffectedCustomerId = newcustomer.CustomerId,
+            };
+            _logRepository.Create(Log);
             IsCreatedConfirmation = true;
         }
 

@@ -11,17 +11,19 @@ namespace BankLib.Model;
 [Table("BankExampleWithEF_EmployeeLog")]
 public partial class EmployeeLog
 {
-    public EmployeeLog(int logId, int responsibleEmployeeId, DateTime date, string activity, int? affectedEmployeeId, int? affectedCustomerId)
+    public EmployeeLog(int logId, int responsibleEmployeeId, DateTime date, string activity, int? affectedEmployeeId, int? affectedCustomerId, string type)
     {
         LogId = logId;
         ResponsibleEmployeeId = responsibleEmployeeId;
         Date = date;
         Activity = activity;
+        Type = type;
         AffectedEmployeeId = affectedEmployeeId;
         AffectedCustomerId = affectedCustomerId;
+        Type = type;
     }
 
-    public EmployeeLog():this(0,0,DateTime.UtcNow,"Default",null,null)
+    public EmployeeLog():this(0,0,DateTime.UtcNow,"Default",null,null,"")
     {
         
     }
@@ -38,6 +40,10 @@ public partial class EmployeeLog
 
     [Required]
     public string Activity { get; set; }
+
+    [Required]
+    [StringLength(50)]
+    public string Type {  get; set; }
 
     [Column("AffectedEmployee_Id")]
     public int? AffectedEmployeeId { get; set; }

@@ -12,6 +12,7 @@ namespace BankLib.Services
     public class AccountRepository : IAccountRepository
     {
         private EFContext _context;
+        public string LogText { get; set; }
         public AccountRepository() 
         {
             _context = new EFContext();
@@ -24,9 +25,12 @@ namespace BankLib.Services
             return theObject;
         }
 
-        public Account Delete(int id)
+        public Account Delete(Account theObject)
         {
-            throw new NotImplementedException();
+            LogText = theObject.ToString();
+            _context.BankExampleWithEfAccounts.Update(theObject);
+            _context.SaveChanges();
+            return theObject;
         }
 
         public List<Account> GetAll()

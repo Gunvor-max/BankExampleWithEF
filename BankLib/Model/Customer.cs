@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BankLib.Model;
 
@@ -79,4 +80,9 @@ public partial class Customer
     [ForeignKey("MainAccountId")]
     [InverseProperty("BankExampleWithEfCustomers")]
     public virtual MainAccount MainAccount { get; set; }
+
+    public override string ToString()
+    {
+        return $"{{Class=Customer: {nameof(CustomerId)}={CustomerId.ToString()}, {nameof(AddressId)}={AddressId.ToString()}, {nameof(MainAccountId)}={MainAccountId.ToString()}, {nameof(FirstName)}={FirstName}, {nameof(LastName)}={LastName}, {nameof(Mail)}={Mail}, {nameof(PhoneNumber)}={PhoneNumber}, {nameof(Password)}={Password}, {nameof(Gender)}={Gender}, {nameof(IsDeleted)}={IsDeleted.ToString()}, {nameof(Address)}={Address}, {nameof(MainAccount)}={MainAccount}}}";
+    }
 }

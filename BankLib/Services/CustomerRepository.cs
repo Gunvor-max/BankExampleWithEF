@@ -31,14 +31,18 @@ namespace BankLib.Services
 
         public Customer Create(Customer theObject)
         {
+            LogText = theObject.ToString();
             _context.BankExampleWithEfCustomers.Add(theObject);
             _context.SaveChanges();
             return theObject;
         }
 
-        public Customer Delete(int id)
+        public Customer Delete(Customer theObject)
         {
-            throw new NotImplementedException();
+            LogText = theObject.ToString();
+            _context.BankExampleWithEfCustomers.Update(theObject);
+            _context.SaveChanges();
+            return theObject;
         }
 
         public List<Customer> GetAll()
@@ -74,6 +78,7 @@ namespace BankLib.Services
 
         public Customer Update(Customer theObject, int id)
         {
+            //Generate log
             LogText = string.Empty;
             var changes = _context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
             foreach (var change in changes)
@@ -95,11 +100,12 @@ namespace BankLib.Services
                     if(originalValue.ToString() != currentValue.ToString())
                     {
                     // Process the information
-                    LogText += ($"Type={entityType}, Property={propertyName}, Original={originalValue}, Current={currentValue}:");
+                    LogText += ($"Class={entityType}, Property={propertyName}, Original={originalValue}, Current={currentValue}:");
                     }
                 }
             }
 
+            //Update object
             _context.BankExampleWithEfCustomers.Update(theObject);
             _context.SaveChanges();
             return theObject;
