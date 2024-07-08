@@ -57,6 +57,33 @@ namespace BankLib.Services
 
         public Account Update(Account theObject, int id)
         {
+            //Generate log
+            LogText = string.Empty;
+            var changes = _context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
+            foreach (var change in changes)
+            {
+                // Get the entity type
+                var entityType = change.Entity.GetType().Name;
+
+                foreach (var property in change.CurrentValues.Properties)
+                {
+                    // Get the property name
+                    var propertyName = property.Name;
+
+                    // Get the current value
+                    var currentValue = change.CurrentValues[propertyName];
+
+                    // Get the original value (if available)
+                    var originalValue = change.OriginalValues[propertyName];
+
+                    if (originalValue.ToString() != currentValue.ToString())
+                    {
+                        // Process the information
+                        LogText += $"Class={entityType},Property={propertyName},Original={originalValue},Current={currentValue}:";
+                    }
+                }
+            }
+
             _context.BankExampleWithEfAccounts.Update(theObject);
             _context.SaveChanges();
             return theObject;

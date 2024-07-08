@@ -1,8 +1,10 @@
 using BankLib.Model;
+using BankLib.Services;
 using BankLib.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Identity.Client;
+using System.ComponentModel.DataAnnotations;
 
 namespace BankApp.Pages.AccountPages
 {
@@ -10,13 +12,16 @@ namespace BankApp.Pages.AccountPages
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IAccountRepository _accountRepository;
-        public AccountListModel(ICustomerRepository customerRepository, IAccountRepository accountRepository)
+        private readonly ILogRepository _logRepository;
+        public AccountListModel(ICustomerRepository customerRepository, IAccountRepository accountRepository, ILogRepository logRepository)
         {
             _customerRepository = customerRepository;
             _accountRepository = accountRepository;
+            _logRepository = logRepository;
             Accounts = _accountRepository.GetAll();
         }
         public List<Account> Accounts { get; set; }
+        public static Employee? EmployeeLoggedIn {  get; set; }
 
         [BindProperty]
         public string? Search { get; set; }
@@ -33,8 +38,11 @@ namespace BankApp.Pages.AccountPages
         //Accountbind
         [BindProperty]
         public int AccountID { get; set; }
+        [Required(ErrorMessage = "Konto navn er påkrævet")]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "Konto navn skal være mellem 2-30 tegn")]
         [BindProperty]
         public string Choosen_AccountName {  get; set; }
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "Konto type skal være mellem 2-30 tegn")]
         [BindProperty]
         public string Choosen_AccountType { get; set; }
 
@@ -55,9 +63,8 @@ namespace BankApp.Pages.AccountPages
             if (SessionHelper.Get<object>(user, HttpContext)?.ToString()?.Contains("AccessLevel") ?? false)
             {
                 //Session is retrieved as an employee object, and further restrictions can be set depending on accesslevel
-                Employee employee = null;
-                employee = SessionHelper.Get<Employee>(employee, HttpContext);
-                if (employee.Position.AccessLevel < 4)
+                EmployeeLoggedIn = SessionHelper.Get<Employee>(EmployeeLoggedIn, HttpContext);
+                if (EmployeeLoggedIn.Position.AccessLevel < 4)
                 {
                     Response.Redirect("/LoginPages/Login");
                 }
@@ -151,13 +158,28 @@ namespace BankApp.Pages.AccountPages
         {
             Account choosenAccount = _accountRepository.Read(accountId);
 
-            if (accountId != 0)
+            if (ModelState.IsValid && accountId != 0)
             {
                 choosenAccount.Name = Choosen_AccountName;
                 choosenAccount.Type = Choosen_AccountType;
                 ShowAccount = _accountRepository.Update(choosenAccount, accountId);
+
+                //Create log
+                EmployeeLog Log = new EmployeeLog
+                {
+                    ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                    Date = DateTime.Now,
+                    Activity = _accountRepository.LogText,
+                    Type = "Account Updated",
+                    AffectedCustomerId = GetCustomerFromMainAccount(choosenAccount.MainAccountId).CustomerId,
+                };
+                _logRepository.Create(Log);
+
                 Accounts = _accountRepository.GetAll();
                 IsUpdatedConfirmation = true;
+            }
+            else 
+            {
             }
         }
 
@@ -171,22 +193,6 @@ namespace BankApp.Pages.AccountPages
         {
             IsEditMode = true;
             CanSetPassword = true;
-        }
-        public void OnPostCreateCustomer()
-        {
-            //Customer newcustomer = new Customer
-            //{
-            //    FirstName = Choosen_FirstName,
-            //    LastName = Choosen_LastName,
-            //    Mail = Choosen_Mail,
-            //    PhoneNumber = Choosen_PhoneNumber,
-            //    Password = Choosen_Password,
-            //    Gender = Choosen_Gender,
-            //    Address = new Address(0, 0, Choosen_StreetName, Choosen_HouseNumber, new City(0, 0, Choosen_City, new ZipCodeTable(0, Choosen_ZipCode))),
-            //};
-            //ShowCustomer = _customerRepository.Create(newcustomer);
-            //Customers = _customerRepository.GetAll();
-            //IsCreatedConfirmation = true;
         }
     }
 }

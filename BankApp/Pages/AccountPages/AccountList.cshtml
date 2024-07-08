@@ -125,12 +125,14 @@
                                     <div class="form-floating mt-3">
                                         <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
                                         <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
+                                        <span class="text-danger" asp-validation-for="Choosen_AccountName"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mt-3">
                                         <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
                                         <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
+                                        <span class="text-danger" asp-validation-for="Choosen_AccountType"></span>
                                     </div>
                                 </div>
                             </div>
