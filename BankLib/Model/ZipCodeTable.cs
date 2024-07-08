@@ -30,4 +30,9 @@ public partial class ZipCodeTable
 
     [InverseProperty("ZipCode")]
     public virtual ICollection<City> BankExampleWithEfCities { get; set; } = new List<City>();
+
+    public override string ToString()
+    {
+        return $"{{Class=ZipCodeTable,{nameof(ZipCode)}={ZipCode.ToString()}}}";
+    }
 }

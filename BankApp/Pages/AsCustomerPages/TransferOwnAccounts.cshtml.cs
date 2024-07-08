@@ -105,7 +105,7 @@ namespace BankApp.Pages.AsCustomerPages
                     CustomerId = CustomerLoggedIn.CustomerId,
                     AccountId = AccountFromStored.AccountId,
                     Amount = DepositAmount,
-                    Date = DateTime.UtcNow,
+                    Date = DateTime.Now,
                     Type = "Fra",
                     Description = Customer_Description,
                     Current_Balance = AccountFromStored.Balance
@@ -116,7 +116,7 @@ namespace BankApp.Pages.AsCustomerPages
                     CustomerId = CustomerLoggedIn.CustomerId,
                     AccountId = AccountToStored.AccountId,
                     Amount = DepositAmount,
-                    Date = DateTime.UtcNow,
+                    Date = DateTime.Now,
                     Type = "Til",
                     Description = Customer_Description,
                     Current_Balance = AccountToStored.Balance
@@ -130,7 +130,7 @@ namespace BankApp.Pages.AsCustomerPages
                     EmployeeId = EmployeeLoggedIn.EmployeeId,
                     AccountId = AccountFromStored.AccountId,
                     Amount = DepositAmount,
-                    Date = DateTime.UtcNow,
+                    Date = DateTime.Now,
                     Type = "Overførsel",
                     Description = Customer_Description,
                     Current_Balance = AccountFromStored.Balance
@@ -141,7 +141,7 @@ namespace BankApp.Pages.AsCustomerPages
                     EmployeeId = EmployeeLoggedIn.EmployeeId,
                     AccountId = AccountToStored.AccountId,
                     Amount = DepositAmount,
-                    Date = DateTime.UtcNow,
+                    Date = DateTime.Now,
                     Type = "Overførsel",
                     Description = Customer_Description,
                     Current_Balance = AccountToStored.Balance

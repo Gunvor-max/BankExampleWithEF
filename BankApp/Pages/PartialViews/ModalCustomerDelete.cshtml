@@ -1,5 +1,6 @@
 ﻿@{
 }
+@using BankLib.Model
 <!-- Delete Modal -->
 <div id="myModalDelete-@Model.CustomerID" class="modal fade" tabindex="-1" aria-labelledby="modalLabel-@Model.CustomerID" aria-hidden="true">
     <div class="modal-dialog">
@@ -12,6 +13,14 @@
             <div class="modal-body text-center">
                 Er du sikker på at du vil slette Kunden:
                 <p style="font-weight:bold"> @Model.Choosen_FirstName @Model.Choosen_LastName</p>
+                @if(Model.Accounts.Count != 0)
+                {
+                    <p>Bemærk dette vil også slette følgende Konti:</p>
+                    @foreach(Account account in Model.Accounts)
+                    {
+                        <p style="font-weight:bold"> @account.Name</p>
+                    } 
+                }
             </div>
             <!--Modal buttons -->
             <div class="modal-footer">

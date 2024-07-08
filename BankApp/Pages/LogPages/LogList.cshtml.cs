@@ -92,38 +92,33 @@ namespace BankApp.Pages.LogPages
             return AffectedCustomer;
         }
 
-        //public IActionResult OnPostSearchAccounts()
-        //{
-        //    if (Search is not null)
-        //    {
-        //        var listcustomers = _customerRepository.Search(Search);
-        //        if (listcustomers.Count != 0)
-        //        {
-        //            foreach (var customer in listcustomers)
-        //            {
-        //                Accounts = _accountRepository.ReadAccountsConnectedToMain(customer.MainAccountId);
-        //                return Page();
-        //            }
-        //        }
-        //    }
-        //    Accounts = _accountRepository.Search(Search);
-        //    return Page();
-        //}
+        public IActionResult OnPostSearchLogs()
+        {
+            var employess = _employeeRepository.Search(Search);
+            if (employess.Count != 0)
+            {
+                foreach (Employee employee in employess)
+                {
+                    Logs = _logRepository.GetAll().Where(i => i.ResponsibleEmployeeId == employee.EmployeeId).ToList();
+                }
+            }
+            else 
+            {
+                Logs = [];
+            }
+            return Page();
+        }
 
         public void OnPostSelectLog(int LogId, string LogType)
         {
-            switch (LogType)
+            if (LogType == "Customer Updated" || LogType == "Employee Updated")
             {
-                case "Customer Created":
-                    LogText = _logRepository.Read(LogId).Activity;
-                    break;
-                case "Customer Updated":
-                    LogText = _logRepository.Read(LogId).Activity.Replace(":", "\n").TrimStart();
-                    break;
-                default:
-                    break;
+                LogText = _logRepository.Read(LogId).Activity.Replace(":", "\n").Replace(",", "\n");
             }
-
+            else 
+            {
+                LogText = _logRepository.Read(LogId).Activity.Replace(",", "\n").Replace("{", "").Replace("}", "");
+            }
 
             //Account choosenAccount = _accountRepository.Read(accountId);
 

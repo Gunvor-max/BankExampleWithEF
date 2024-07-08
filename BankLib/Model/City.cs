@@ -41,4 +41,9 @@ public partial class City
     [ForeignKey("ZipCodeId")]
     [InverseProperty("BankExampleWithEfCities")]
     public virtual ZipCodeTable ZipCode { get; set; }
+
+    public override string ToString()
+    {
+        return $"{{Class=City,{nameof(ZipCodeId)}={ZipCodeId.ToString()},{nameof(CityName)}={CityName},{nameof(ZipCode)}={ZipCode}}}";
+    }
 }

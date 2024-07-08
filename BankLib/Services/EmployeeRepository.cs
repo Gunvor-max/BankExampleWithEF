@@ -13,6 +13,7 @@ namespace BankLib.Services
     public class EmployeeRepository : IEmployeeRepository
     {
         private EFContext _context;
+        public string? LogText { get; set; }
         public Employee Isloggedin { get; set; }
         public EmployeeRepository() 
         {
@@ -23,12 +24,16 @@ namespace BankLib.Services
         {
             _context.BankExampleWithEfEmployees.Add(theObject);
             _context.SaveChanges();
+            LogText = theObject.ToString();
             return theObject;
         }
 
         public Employee Delete(Employee theObject)
         {
-            throw new NotImplementedException();
+            _context.BankExampleWithEfEmployees.Update(theObject);
+            _context.SaveChanges();
+            LogText = theObject.ToString();
+            return theObject;
         }
 
         public List<Employee> GetAll()
@@ -58,6 +63,33 @@ namespace BankLib.Services
 
         public Employee? Update(Employee theObject, int id)
         {
+            //Generate log
+            LogText = string.Empty;
+            var changes = _context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
+            foreach (var change in changes)
+            {
+                // Get the entity type
+                var entityType = change.Entity.GetType().Name;
+
+                foreach (var property in change.CurrentValues.Properties)
+                {
+                    // Get the property name
+                    var propertyName = property.Name;
+
+                    // Get the current value
+                    var currentValue = change.CurrentValues[propertyName];
+
+                    // Get the original value (if available)
+                    var originalValue = change.OriginalValues[propertyName];
+
+                    if (originalValue.ToString() != currentValue.ToString())
+                    {
+                        // Process the information
+                        LogText += $"Class={entityType},Property={propertyName},Original={originalValue},Current={currentValue}:";
+                    }
+                }
+            }
+
             _context.BankExampleWithEfEmployees.Update(theObject);
             _context.SaveChanges();
             return theObject;

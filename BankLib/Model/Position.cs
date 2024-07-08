@@ -38,4 +38,9 @@ public partial class Position
 
     [InverseProperty("Position")]
     public virtual ICollection<Employee> BankExampleWithEfEmployees { get; set; } = new List<Employee>();
+
+    public override string ToString()
+    {
+        return $"{{Class=Position,{nameof(PositionId)}={PositionId.ToString()},{nameof(Title)}={Title},{nameof(Description)}={Description},{nameof(AccessLevel)}={AccessLevel.ToString()},}}";
+    }
 }

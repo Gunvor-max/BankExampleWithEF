@@ -107,6 +107,6 @@ public partial class Employee
 
     public override string ToString()
     {
-        return $"{{Class=Employee: {nameof(EmployeeId)}={EmployeeId.ToString()}, {nameof(AddressId)}={AddressId.ToString()}, {nameof(PositionId)}={PositionId.ToString()}, {nameof(DepartmentId)}={DepartmentId.ToString()}, {nameof(MainAccountId)}={MainAccountId.ToString()}, {nameof(FirstName)}={FirstName}, {nameof(LastName)}={LastName}, {nameof(Mail)}={Mail}, {nameof(PhoneNumber)}={PhoneNumber}, {nameof(Password)}={Password}, {nameof(Gender)}={Gender}, {nameof(IsDeleted)}={IsDeleted.ToString()}, {nameof(ImagePath)}={ImagePath}, {nameof(Address)}={Address}, {nameof(Department)}={Department}, {nameof(MainAccount)}={MainAccount}, {nameof(Position)}={Position}}}";
+        return $"{{Class=Employee,{nameof(EmployeeId)}={EmployeeId.ToString()},{nameof(AddressId)}={AddressId.ToString()},{nameof(PositionId)}={PositionId.ToString()},{nameof(DepartmentId)}={DepartmentId.ToString()},{nameof(MainAccountId)}={MainAccountId.ToString()},{nameof(FirstName)}={FirstName},{nameof(LastName)}={LastName},{nameof(Mail)}={Mail},{nameof(PhoneNumber)}={PhoneNumber},{nameof(Gender)}={Gender},{nameof(IsDeleted)}={IsDeleted.ToString()},{nameof(ImagePath)}={ImagePath},{nameof(Address)}={Address},{nameof(Department)}={Department},{nameof(Position)}={Position},}}";
     }
 }

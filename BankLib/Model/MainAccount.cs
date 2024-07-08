@@ -33,4 +33,9 @@ public partial class MainAccount
 
     [InverseProperty("MainAccount")]
     public virtual ICollection<Employee> BankExampleWithEfEmployees { get; set; } = new List<Employee>();
+
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

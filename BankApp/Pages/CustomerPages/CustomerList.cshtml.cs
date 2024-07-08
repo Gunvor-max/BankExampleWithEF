@@ -23,6 +23,8 @@ namespace BankApp.Pages.CustomerPages
         }
         public List<Customer> Customers { get; set; }
         public static Employee? EmployeeLoggedIn { get; set; }
+        public string AccountLogText { get; set; }
+        public List<Account> Accounts { get; set; }
 
         [BindProperty]
         public string? Search { get; set; }
@@ -98,6 +100,7 @@ namespace BankApp.Pages.CustomerPages
         public void OnPostSelectCustomer(int Id)
         {
             Customer customer = _customerRepository.Read(Id);
+            Accounts = _accountRepository.ReadAccountsConnectedToMain(customer.MainAccountId);
 
             if (Id != 0)
             {
@@ -151,32 +154,42 @@ namespace BankApp.Pages.CustomerPages
             customer.IsDeleted = true;
             ShowCustomer = _customerRepository.Delete(customer);
 
-            //Create log
-            EmployeeLog Log = new EmployeeLog
-            {
-                ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
-                Date = DateTime.UtcNow,
-                Activity = _customerRepository.LogText,
-                Type = "Customer Deleted",
-                AffectedCustomerId = customer.CustomerId,
-            };
-            _logRepository.Create(Log);
 
             //Delete Accounts connected to customer
             foreach (Account account in accounts)
             {
                 account.IsDeleted = true;
                 _accountRepository.Delete(account);
+                AccountLogText += _accountRepository.LogText; 
+            }
 
-                EmployeeLog LogAccount = new EmployeeLog
+            if (accounts.Count != 0)
+            {
+                //Create log for customer and accounts
+                EmployeeLog Log = new EmployeeLog
                 {
                     ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
-                    Date = DateTime.UtcNow,
-                    Activity = _customerRepository.LogText,
-                    Type = "Account Deleted",
+                    Date = DateTime.Now,
+                    Activity = _customerRepository.LogText + AccountLogText,
+                    Type = "Customer and Accounts Deleted",
                     AffectedCustomerId = customer.CustomerId,
                 };
-                _logRepository.Create(LogAccount);
+
+                _logRepository.Create(Log);
+            }
+            else
+            {
+                //Create log for customer and accounts
+                EmployeeLog Log = new EmployeeLog
+                {
+                    ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                    Date = DateTime.Now,
+                    Activity = _customerRepository.LogText,
+                    Type = "Customer Deleted",
+                    AffectedCustomerId = customer.CustomerId,
+                };
+
+                _logRepository.Create(Log);
             }
             Customers = _customerRepository.GetAll();
             IsDeletedConfirmation = true;
@@ -208,7 +221,7 @@ namespace BankApp.Pages.CustomerPages
                     EmployeeLog Log = new EmployeeLog
                     {
                         ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
-                        Date = DateTime.UtcNow,
+                        Date = DateTime.Now,
                         Activity = _customerRepository.LogText,
                         Type = "Customer Updated",
                         AffectedCustomerId = customer.CustomerId,
@@ -252,7 +265,7 @@ namespace BankApp.Pages.CustomerPages
             EmployeeLog Log = new EmployeeLog
             {
                 ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
-                Date = DateTime.UtcNow,
+                Date = DateTime.Now,
                 Activity = _customerRepository.LogText,
                 Type = "Customer Created",
                 AffectedCustomerId = newcustomer.CustomerId,
@@ -278,12 +291,23 @@ namespace BankApp.Pages.CustomerPages
                 CustomerId = customer.CustomerId,
                 AccountId = newaccount.AccountId,
                 Amount = 0,
-                Date = DateTime.UtcNow,
+                Date = DateTime.Now,
                 Type = "Oprettet",
                 Description = "Konto oprettet",
                 Current_Balance = newaccount.Balance
             };
             _transactionRepository.Create(starttransaction);
+
+            EmployeeLog Log = new EmployeeLog
+            {
+                ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                Date = DateTime.Now,
+                Activity = _accountRepository.LogText,
+                Type = "Account Created",
+                AffectedCustomerId = customer.CustomerId,
+            };
+            _logRepository.Create(Log);
+            IsCreatedConfirmation = true;
         }
     }
 }

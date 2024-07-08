@@ -35,4 +35,9 @@ public partial class Department
 
     [InverseProperty("Department")]
     public virtual ICollection<Employee> BankExampleWithEfEmployees { get; set; } = new List<Employee>();
+
+    public override string ToString()
+    {
+        return $"{{Class=Department,{nameof(DepartmentId)}={DepartmentId.ToString()},{nameof(Name)}={Name},{nameof(Description)}={Description},}}";
+    }
 }

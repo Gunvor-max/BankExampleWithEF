@@ -22,14 +22,15 @@ namespace BankLib.Services
         {
             _context.BankExampleWithEfAccounts.Add(theObject);
             _context.SaveChanges();
+            LogText = theObject.ToString();
             return theObject;
         }
 
         public Account Delete(Account theObject)
         {
-            LogText = theObject.ToString();
             _context.BankExampleWithEfAccounts.Update(theObject);
             _context.SaveChanges();
+            LogText = theObject.ToString();
             return theObject;
         }
 

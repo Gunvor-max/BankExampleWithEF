@@ -47,4 +47,9 @@ public partial class Address
     [ForeignKey("CityId")]
     [InverseProperty("BankExampleWithEfAddresses")]
     public virtual City City { get; set; }
+
+    public override string ToString()
+    {
+        return $"{{Class=Address,{nameof(CityId)}={CityId.ToString()},{nameof(StreetName)}={StreetName},{nameof(HouseNumber)}={HouseNumber.ToString()},{nameof(City)}={City}}}";
+    }
 }

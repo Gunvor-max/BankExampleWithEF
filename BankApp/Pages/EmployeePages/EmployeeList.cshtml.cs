@@ -4,18 +4,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using BankLib.Model;
 using System.Net;
 using System.Reflection;
+using BankLib.Services;
 
 namespace BankApp.Pages.EmployeePages
 {
     public class EmployeeListModel : PageModel
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeListModel(IEmployeeRepository employeeRepository)
+        private readonly ILogRepository _logRepository;
+        private readonly IAccountRepository _accountRepository;
+        public EmployeeListModel(IEmployeeRepository employeeRepository, ILogRepository logRepository, IAccountRepository accountRepository)
         {
             _employeeRepository = employeeRepository;
+            _logRepository = logRepository;
+            _accountRepository = accountRepository;
             Employees = _employeeRepository.GetAll();
         }
         public List<Employee> Employees { get; set; }
+        public static Employee? EmployeeLoggedIn {  get; set; }
+        public string? AccountLogText { get; set; }
 
         [BindProperty]
         public string? Search { get; set; }
@@ -80,9 +87,8 @@ namespace BankApp.Pages.EmployeePages
             if (SessionHelper.Get<object>(user, HttpContext)?.ToString()?.Contains("AccessLevel") ?? false)
             {
                 //Session is retrieved as an employee object, and further restrictions can be set depending on accesslevel
-                Employee employee = null;
-                employee = SessionHelper.Get<Employee>(employee, HttpContext);
-                if (employee.Position.AccessLevel < 4)
+                EmployeeLoggedIn = SessionHelper.Get<Employee>(EmployeeLoggedIn, HttpContext);
+                if (EmployeeLoggedIn.Position.AccessLevel < 4)
                 {
                     Response.Redirect("/LoginPages/Login");
                 }
@@ -177,12 +183,51 @@ namespace BankApp.Pages.EmployeePages
         public void OnPostDeleteEmployee(int id)
         {
             Employee employee = _employeeRepository.Read(id);
+            List<Account> accounts = _accountRepository.ReadAccountsConnectedToMain(employee.MainAccountId);
             if (id != 0)
             {
                 if (employee is not null)
                 {
                     employee.IsDeleted = true;
-                    ShowEmployee = _employeeRepository.Update(employee, id);
+                    ShowEmployee = _employeeRepository.Delete(employee);
+
+                    //Delete Accounts connected to employee
+                    foreach (Account account in accounts)
+                    {
+                        account.IsDeleted = true;
+                        _accountRepository.Delete(account);
+                        AccountLogText += _accountRepository.LogText;
+                    }
+
+                    if (accounts.Count != 0)
+                    {
+                        //Create log for customer and accounts
+                        EmployeeLog Log = new EmployeeLog
+                        {
+                            ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                            Date = DateTime.Now,
+                            Activity = _employeeRepository.LogText + AccountLogText,
+                            Type = "Employee and Accounts Deleted",
+                            AffectedEmployeeId = employee.EmployeeId,
+                        };
+
+                        _logRepository.Create(Log);
+                    }
+                    else
+                    {
+                        //Create log for customer and accounts
+                        EmployeeLog Log = new EmployeeLog
+                        {
+                            ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                            Date = DateTime.Now,
+                            Activity = _employeeRepository.LogText,
+                            Type = "Employee Deleted",
+                            AffectedEmployeeId = employee.EmployeeId,
+                        };
+
+                        _logRepository.Create(Log);
+                    }
+
                     Employees = _employeeRepository.GetAll();
                 }
             }
@@ -214,6 +259,17 @@ namespace BankApp.Pages.EmployeePages
                         employee.Department.Description = Choosen_DepartmentDescription;
                         ShowEmployee = _employeeRepository.Update(employee, id);
                         Employees = _employeeRepository.GetAll();
+
+                        //Create log
+                        EmployeeLog Log = new EmployeeLog
+                        {
+                        ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                        Date = DateTime.Now,
+                        Activity = _employeeRepository.LogText,
+                        Type = "Employee Updated",
+                        AffectedEmployeeId = employee.EmployeeId,
+                        };
+                        _logRepository.Create(Log);
                         IsUpdatedConfirmation = true;
                     }
                 }
@@ -241,7 +297,18 @@ namespace BankApp.Pages.EmployeePages
                 Position = new Position(0,Choosen_Title,Choosen_PositionDescription,Choosen_AccessLevel),
                 Department = new Department(0,Choosen_DepartmentName,Choosen_DepartmentDescription),
             };
-                ShowEmployee = _employeeRepository.Create(newemployee);
+            ShowEmployee = _employeeRepository.Create(newemployee);
+
+            EmployeeLog Log = new EmployeeLog
+            {
+                ResponsibleEmployeeId = EmployeeLoggedIn.EmployeeId,
+                Date = DateTime.Now,
+                Activity = _employeeRepository.LogText,
+                Type = "Employee Created",
+                AffectedEmployeeId = newemployee.EmployeeId,
+            };
+            _logRepository.Create(Log);
+
             Employees = _employeeRepository.GetAll();
             IsCreatedConfirmation = true;
         }

@@ -24,37 +24,13 @@
         <a id="Headline" href="/LogPages/LogList">
             <h1>Logs</h1>
         </a>
-        @if (isDeletedConfirmation)
-        {
-            <div class="alert-success">
-                <h5>
-                    Kontoen @Model.ShowAccount.Name er nu slettet fra systemet
-                </h5>
-            </div>
-        }
-        @if (isCreatedConfirmation)
-        {
-            <div class="alert-success">
-                <h5>
-                    Kontoen @Model.ShowAccount.Name er nu oprettet i systemet
-                </h5>
-            </div>
-        }
-        @if (isUpdatedConfirmation)
-        {
-            <div class="alert-success">
-                <h5>
-                    Kontoen @Model.ShowAccount.Name er nu opdateret i systemet
-                </h5>
-            </div>
-        }
         <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
             <div class="row custom-row">
                 <div class="col custom-col">
 
                     <form method="post">
-                        <input class="form-control mb-3" type="text" asp-for="@Model.Search" placeholder="Søg efter konti..." />
-                        <input type="submit" asp-page-handler="SearchAccounts" class="btn btn-primary visually-hidden" value="søg" />
+                        <input class="form-control mb-3" type="text" asp-for="@Model.Search" placeholder="Søg efter log..." />
+                        <input type="submit" asp-page-handler="SearchLogs" class="btn btn-primary visually-hidden" value="søg" />
                     </form>
 
                     <table class="table table-hover">
@@ -82,7 +58,7 @@
                                                 @e.Date
                                         </td>
                                         <td>
-                                            @(e.AffectedEmployee is null ? $"{Model.GetAffectedCustomer(e.AffectedCustomerId).FirstName} {Model.GetAffectedCustomer(e.AffectedCustomerId).LastName}" : $"{Model.GetAffectedEmployee(e.AffectedEmployeeId).FirstName} {Model.GetAffectedEmployee(e.AffectedEmployeeId).LastName}")
+                                            @(e.AffectedEmployeeId is null ? $"{Model.GetAffectedCustomer(e.AffectedCustomerId).FirstName} {Model.GetAffectedCustomer(e.AffectedCustomerId).LastName}" : $"{Model.GetAffectedEmployee(e.AffectedEmployeeId).FirstName} {Model.GetAffectedEmployee(e.AffectedEmployeeId).LastName}")
                                         </td>
                                         <td>
                                                 @e.Type
@@ -103,40 +79,10 @@
                 @if (isChoosen)
                 {
                     <div class="col-md-6 custom-col">
-                        <form method="post">
                             <h4>Log oplysninger:</h4>
                             <div class="row">
                             <textarea id="floatingInput" rows="30" class="col-md-12 custom-col" name="floatingInput" readonly>@Model.LogText</textarea>
                             </div>
-                            @if (isEditMode)
-                            {
-                                @if (isEditTriggered)
-                                {
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <button id="editanddelete" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.AccountID" data-employee-id="@Model.AccountID">Gem ændringer</button>
-                                        </div>
-                                    </div>
-                                    <!-- PartielView to trigger the AccountUpdate modal-->
-                                    <partial name="PartialViews/ModalAccountUpdate" />
-                                }
-                            }
-                            else if (isDeleteAble)
-                            {
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <button id="editanddelete" type="submit" asp-page-handler="EnableEdit" asp-route-accountId="@Model.AccountID" class="btn btn-outline-warning">Ret</button>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <button id="editanddelete" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#myModalDelete-@Model.AccountID" data-account-id="@Model.AccountID">Slet</button>
-                                    </div>
-                                </div>
-                            }
-                            <!-- PartielView to trigger the EmployeeDelete modal-->
-                            <partial name="PartialViews/ModalAccountDelete" />
-
-                        </form>
                     </div>
                 }
             </div>

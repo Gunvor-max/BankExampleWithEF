@@ -31,17 +31,17 @@ namespace BankLib.Services
 
         public Customer Create(Customer theObject)
         {
-            LogText = theObject.ToString();
             _context.BankExampleWithEfCustomers.Add(theObject);
             _context.SaveChanges();
+            LogText = theObject.ToString();
             return theObject;
         }
 
         public Customer Delete(Customer theObject)
         {
-            LogText = theObject.ToString();
             _context.BankExampleWithEfCustomers.Update(theObject);
             _context.SaveChanges();
+            LogText = theObject.ToString();
             return theObject;
         }
 
@@ -100,7 +100,7 @@ namespace BankLib.Services
                     if(originalValue.ToString() != currentValue.ToString())
                     {
                     // Process the information
-                    LogText += ($"Class={entityType}, Property={propertyName}, Original={originalValue}, Current={currentValue}:");
+                    LogText += $"Class={entityType},Property={propertyName},Original={originalValue},Current={currentValue}:";
                     }
                 }
             }
