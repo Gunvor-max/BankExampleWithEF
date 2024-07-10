@@ -104,7 +104,7 @@
                 @if (isChoosen)
                 {
                     <div class="col-md-6 custom-col">
-                        <form method="post">
+                        <form method="post" id="Accountinformationform">
                             <h4>Konto oplysninger:</h4>
                             <div class="row">
                                 <div class="col-md-6">
@@ -123,14 +123,14 @@
                                         <label asp-for="AccountID" for="floatingInput">Konto Id</label>
                                     </div>
                                     <div class="form-floating mt-3">
-                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
-                                        <label asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
-                                        <span class="text-danger" asp-validation-for="Choosen_AccountName"></span>
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" pattern=".{2,30}" required oninvalid="this.setCustomValidity('Konto navn skal være mellem 2-30 tegn')" title="Konto navn skal være mellem 2-30 tegn" readonly="@(isEditMode ? false : true)" />
+                                        <label class="form-label" asp-for="Choosen_AccountName" for="floatingInput">Konto navn</label>
+                                        @* <span class="text-danger" asp-validation-for="Choosen_AccountName"></span> *@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mt-3">
-                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" minlength="1" maxlength="50" required readonly="@(isEditMode ? false : true)" />
+                                        <input type="text" class="form-control" id="floatingInput" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" pattern=".{2,30}" required title="Konto type skal være mellem 2-30 tegn" readonly="@(isEditMode ? false : true)" />
                                         <label asp-for="Choosen_AccountType" for="floatingInput">Konto type</label>
                                         <span class="text-danger" asp-validation-for="Choosen_AccountType"></span>
                                     </div>
@@ -140,9 +140,23 @@
                             {
                                 @if (isEditTriggered)
                                 {
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var form = document.getElementById('Accountinformationform');
+                                            var submitButton = document.getElementById('editanddeleteModal');
+
+                                            form.addEventListener('input', function () {
+                                                if (form.checkValidity()) {
+                                                    submitButton.disabled = false;
+                                                } else {
+                                                    submitButton.disabled = true;
+                                                }
+                                            });
+                                        });
+                                    </script>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <button id="editanddelete" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.AccountID" data-employee-id="@Model.AccountID">Gem ændringer</button>
+                                            <button id="editanddeleteModal" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalUpdate-@Model.AccountID" data-employee-id="@Model.AccountID">Gem ændringer</button>
                                         </div>
                                     </div>
                                     <!-- PartielView to trigger the AccountUpdate modal-->

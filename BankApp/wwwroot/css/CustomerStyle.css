@@ -72,6 +72,10 @@ PaymentFormBtn {
     color: black;
 }
 
+#editanddeleteModal {
+    width: -webkit-fill-available;
+    color: black;
+}
 #Headline {
     text-decoration: none;
     color: black;

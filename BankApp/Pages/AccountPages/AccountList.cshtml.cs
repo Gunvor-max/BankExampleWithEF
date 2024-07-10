@@ -21,7 +21,7 @@ namespace BankApp.Pages.AccountPages
             Accounts = _accountRepository.GetAll();
         }
         public List<Account> Accounts { get; set; }
-        public static Employee? EmployeeLoggedIn {  get; set; }
+        public static Employee? EmployeeLoggedIn { get; set; }
 
         [BindProperty]
         public string? Search { get; set; }
@@ -38,6 +38,7 @@ namespace BankApp.Pages.AccountPages
         //Accountbind
         [BindProperty]
         public int AccountID { get; set; }
+
         [Required(ErrorMessage = "Konto navn er påkrævet")]
         [StringLength(30, MinimumLength = 2, ErrorMessage = "Konto navn skal være mellem 2-30 tegn")]
         [BindProperty]
@@ -102,6 +103,10 @@ namespace BankApp.Pages.AccountPages
 
         public void OnPostSelectAccount(int accountId)
         {
+
+            ModelState.Remove("Choosen_AccountType");
+            ModelState.Remove("Choosen_AccountName");
+
             Account choosenAccount = _accountRepository.Read(accountId);
 
             if (accountId != 0)
@@ -180,6 +185,7 @@ namespace BankApp.Pages.AccountPages
             }
             else 
             {
+                OnPostEnableEdit(accountId);
             }
         }
 
