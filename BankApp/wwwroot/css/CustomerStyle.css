@@ -76,6 +76,12 @@ PaymentFormBtn {
     width: -webkit-fill-available;
     color: black;
 }
+
+#formbtn {
+    width: -webkit-fill-available;
+    color: black;
+}
+
 #Headline {
     text-decoration: none;
     color: black;
