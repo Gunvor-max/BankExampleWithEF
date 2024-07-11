@@ -7,7 +7,7 @@
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h4 class="modal-title w-100" id="modalLabel-@Model.AccountID">Opdater Konto</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close RegretButtons" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
                 Er du sikker på at du vil ændre Kontoen:
@@ -16,7 +16,7 @@
             </div>
             <!--Modal buttons -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Fortryd</button>
+                <button type="button" class="btn btn-warning RegretButtons" data-bs-dismiss="modal">Fortryd</button>
                 <button id="SubmitUpdateAccount" type="submit" asp-page-handler="UpdateAccount" class="btn btn-success" asp-route-id="@Model.AccountID">Bekræft</button>
             </div>
         </div>

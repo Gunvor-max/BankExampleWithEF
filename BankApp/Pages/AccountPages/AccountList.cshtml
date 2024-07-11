@@ -125,14 +125,12 @@
                                     <div class="form-floating mt-3">
                                         <input type="text" class="form-control" id="InputAccountName" value="@Model.Choosen_AccountName" asp-for="Choosen_AccountName" pattern=".{2,30}" required oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Konto navn skal være mellem 2-30 tegn')" readonly="@(isEditMode ? false : true)" />
                                         <label class="form-label" asp-for="Choosen_AccountName" for="InputAccountName">Konto navn</label>
-                                        @* <span class="text-danger" asp-validation-for="Choosen_AccountName"></span> *@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mt-3">
-                                        <input type="text" class="form-control" id="InputAccountType" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" pattern=".{2,30}" oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Konto navn skal være mellem 2-30 tegn')" readonly="@(isEditMode ? false : true)" />
+                                        <input type="text" class="form-control" id="InputAccountType" value="@Model.Choosen_AccountType" asp-for="Choosen_AccountType" pattern=".{2,30}" required oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Konto navn skal være mellem 2-30 tegn')" readonly="@(isEditMode ? false : true)" />
                                         <label asp-for="Choosen_AccountType" for="InputAccountType">Konto type</label>
-                                        @*  <span class="text-danger" asp-validation-for="Choosen_AccountType"></span> *@
                                     </div>
                                 </div>
                             </div>
@@ -164,64 +162,12 @@
                             }
                             <!-- PartielView to trigger the EmployeeDelete modal-->
                             <partial name="PartialViews/ModalAccountDelete" />
-
-                            <script>
-                                window.onload = function () {
-                                    const form = document.getElementById('Accountinformationform'); // replace with your form's ID
-                                    const inputName = document.querySelector("input[id='InputAccountName']"); // Assuming ID
-                                    const inputType = document.querySelector("input[id='InputAccountType']"); // Assuming ID for the new input field
-                                    const submitButton = document.getElementById("editanddeleteModal"); // Assuming ID
-                                    const SecondButton = document.getElementById("formbtn"); // Assuming ID
-                                    const ThirdButton = document.getElementById("SubmitUpdateAccount"); // Assuming ID for the third button
-
-                                    // Hide the second button initially
-                                    SecondButton.hidden = true;
-
-                                    let enterKeyPressCount = 0; // Variable to track the number of times the Enter key has been pressed
-
-                                    inputName.addEventListener("input", updateValue);
-                                    inputType.addEventListener("input", updateValue); // Add event listener to the new input field
-
-                                    function updateValue(e) {
-                                        if (inputName.value.length <= 1 || inputType.value.length <= 1) {  // Check input length of both target elements
-                                            submitButton.hidden = true;
-                                            SecondButton.hidden = false;
-                                        } else {
-                                            SecondButton.hidden = true;
-                                            submitButton.hidden = false;
-                                        }
-                                    }
-
-                                    form.addEventListener('keydown', function (event) {
-                                        if (event.key === 'Enter') {
-                                            event.preventDefault(); // prevent form submission
-                                            // Check which button to simulate a click on
-                                            if (inputName.value.length <= 1 || inputType.value.length <= 1) {
-                                                SecondButton.click();
-                                            } else if (enterKeyPressCount === 0) {
-                                                submitButton.click();
-                                                enterKeyPressCount++;
-                                            } else {
-                                                ThirdButton.click();
-                                            }
-                                        }
-                                    });
-
-                                    // Trigger the input event manually for both input fields
-                                    var event = new Event('input', {
-                                        bubbles: true,
-                                        cancelable: true,
-                                    });
-                                    inputName.dispatchEvent(event);
-                                    inputType.dispatchEvent(event); // Dispatch event for the new input field
-                                }
-                            </script>
                         </form>
                     </div>
                 }
             </div>
         </div>
     </div>
-    @*     <script src="~/js/AccountListJava.js"></script> *@
+        <script src="~/js/AccountListJava.js"></script>
 </body>
 </html>

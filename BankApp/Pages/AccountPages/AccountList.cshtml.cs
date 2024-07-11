@@ -43,6 +43,8 @@ namespace BankApp.Pages.AccountPages
         [StringLength(30, MinimumLength = 2, ErrorMessage = "Konto navn skal være mellem 2-30 tegn")]
         [BindProperty]
         public string Choosen_AccountName {  get; set; }
+
+        [Required(ErrorMessage = "Konto type er påkrævet")]
         [StringLength(30, MinimumLength = 2, ErrorMessage = "Konto type skal være mellem 2-30 tegn")]
         [BindProperty]
         public string Choosen_AccountType { get; set; }
