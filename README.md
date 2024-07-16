@@ -1,4 +1,4 @@
-# Banking system demo
+Banking system demo
 A demo banking system with authentication for users and employees. Project is build in razorpages with MSSQL database as data storage. 
 Employees have access to:
   - CRUD operations for Customers, Accounts and other Employees
