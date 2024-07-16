@@ -23,4 +23,12 @@ This project is a personal learning project designed to enhance my skills in bui
 ### Additional Notes:
   - The project is in continuous development and new functionality/features will be added with time. 
 
+### UI Examples
 ![Employee Index](https://github.com/user-attachments/assets/6bf9a4b2-c175-4078-8b39-31244b71e627)
+
+![TransferBetweenAccounts](https://github.com/user-attachments/assets/cdcc8ec6-15aa-4481-9739-c74b709bafcc)
+
+![AccountBalance Graph](https://github.com/user-attachments/assets/125ef891-9e07-4d6e-8cec-c10341fccdd0)
+
+### Database Design
+![BankExample MSSQL Database Structure](https://github.com/user-attachments/assets/ed44a94a-1fd6-4c48-bf20-12083d430fdb)
