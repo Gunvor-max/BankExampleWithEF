@@ -65,6 +65,7 @@ namespace BankApp.Pages.CustomerPages
         public bool IsDeleteable { get; set; } = false;
         public bool IsDeletedConfirmation { get; set; } = false;
         public Customer ShowCustomer { get; set; }
+        public Account ShowAccount { get; set; }
         public bool IsCustomerAgent { get; set; }
         public bool IsEditTriggered { get; set; } = false;
         public bool IsCreatedConfirmation { get; set; } = false;
@@ -284,7 +285,7 @@ namespace BankApp.Pages.CustomerPages
                 MainAccountId = customer.MainAccountId
             };
 
-            _accountRepository.Create(newaccount);
+            ShowAccount = _accountRepository.Create(newaccount);
 
             Transaction starttransaction = new Transaction
             {

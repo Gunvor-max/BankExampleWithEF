@@ -27,27 +27,60 @@
         </a>
         @if (isDeletedConfirmation)
         {
-            <div class="alert-success">
-                <h5>
-                    Medarbejderen @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName er nu slettet fra systemet
-                </h5>
-            </div>
+            if (Model.ShowCustomer is not null)
+            {
+                <div class="alert-success">
+                    <h5>
+                        Medarbejderen @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName er nu slettet fra systemet
+                    </h5>
+                </div>
+            }
+            else
+            {
+                <div class="alert-success">
+                    <h5>
+                        Kontoen @Model.ShowAccount.Name af typen @Model.ShowAccount.Type er nu slettet fra systemet
+                    </h5>
+                </div>
+            }
         }
         @if (isCreatedConfirmation)
         {
+            if(Model.ShowCustomer is not null)
+            {
             <div class="alert-success">
                 <h5>
                     Medarbejderen @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName er nu oprettet i systemet
                 </h5>
-            </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert-success">
+                    <h5>
+                        Kontoen @Model.ShowAccount.Name af typen @Model.ShowAccount.Type er nu oprettet i systemet
+                    </h5>
+                </div>
+            }
         }
         @if (isUpdatedConfirmation)
         {
-            <div class="alert-success">
-                <h5>
-                    Medarbejderen @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName er nu opdateret i systemet
-                </h5>
-            </div>
+            if (Model.ShowCustomer is not null)
+            {
+                <div class="alert-success">
+                    <h5>
+                        Medarbejderen @Model.ShowCustomer.FirstName @Model.ShowCustomer.LastName er nu opdateret i systemet
+                    </h5>
+                </div>
+            }
+            else
+            {
+                <div class="alert-success">
+                    <h5>
+                        Kontoen @Model.ShowAccount.Name af typen @Model.ShowAccount.Type er nu opdateret i systemet
+                    </h5>
+                </div>
+            }
         }
         <div class="rounded-lg pt-3 pr-3 pl-3 bg-white">
             <div class="row custom-row">
