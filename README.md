@@ -18,7 +18,7 @@ This project is a personal learning project designed to enhance my skills in bui
   - Frontend: HTML, CSS, Javascript, Bootstrap
   - Backend: C# with ASP.NET Core (Razor Pages)
   - Database: Microsoft SQL Server (MSSQL)
-  - Frameworks: MS Entity Framework
+  - Frameworks: MS Entity Framework (ORM)
 
 ### Additional Notes:
   - The project is in continuous development and new functionality/features will be added with time. 
